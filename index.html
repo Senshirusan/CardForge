@@ -9,12 +9,53 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  :root { --bg: #08080c; --panel: rgba(22, 22, 28, 0.72); --panel-2: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.09); --arcane: #6d5ef0; --arcane-2: #8b7bf7; --ember: #f5793a; --ember-2: #fbbf24; --text: #f5f5f7; --steel: #9a9aa6; --steel-dim: #6c6c78; --off: #34343d; --on: var(--arcane); --danger: #ef4444; --danger-soft: rgba(239,68,68,0.13); --success: #22c55e; --radius-lg: 22px; --radius-md: 14px; --radius-sm: 10px; --shadow-lg: 0 24px 60px -20px rgba(0,0,0,0.55); --shadow-md: 0 12px 28px -10px rgba(0,0,0,0.45); }
+  :root {
+    --bg: #08080c;
+    --panel: rgba(22, 22, 28, 0.72);
+    --panel-2: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.09);
+    --arcane: #6d5ef0;
+    --arcane-2: #8b7bf7;
+    --ember: #f5793a;
+    --ember-2: #fbbf24;
+    --text: #f5f5f7;
+    --steel: #9a9aa6;
+    --steel-dim: #6c6c78;
+    --off: #34343d;
+    --on: var(--arcane);
+    --danger: #ef4444;
+    --danger-soft: rgba(239,68,68,0.13);
+    --success: #22c55e;
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --shadow-lg: 0 24px 60px -20px rgba(0,0,0,0.55);
+    --shadow-md: 0 12px 28px -10px rgba(0,0,0,0.45);
+  }
   * { box-sizing: border-box; }
-  body { background: var(--bg); background-image: radial-gradient(circle at 18% -10%, rgba(109,94,240,0.22) 0%, transparent 45%), radial-gradient(circle at 85% 0%, rgba(245,121,58,0.14) 0%, transparent 40%); background-attachment: fixed; color: var(--text); font-family: 'Inter', sans-serif; padding: 28px 20px 0; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 18% -10%, rgba(109,94,240,0.22) 0%, transparent 45%),
+      radial-gradient(circle at 85% 0%, rgba(245,121,58,0.14) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    padding: 28px 20px 0;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  button { font-family: 'Inter', sans-serif; }
+  button:active { transform: scale(0.97); }
+  a { color: inherit; }
+  ::placeholder { color: var(--steel-dim); opacity: 1; }
+  :focus-visible { outline: 2px solid var(--arcane-2); outline-offset: 2px; }
   .loading { opacity: 0.7; pointer-events: none; cursor: wait; }
   .loading svg { animation: spin 0.85s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
   .app-shell { max-width: 1000px; width: 100%; margin: 0 auto; }
   .app-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
   .brand { display: flex; align-items: center; gap: 14px; }
@@ -23,40 +64,108 @@
   .accent-word { background: linear-gradient(135deg, var(--arcane-2), var(--ember)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); margin: 4px 0 0; }
   .badge-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: var(--arcane-2); background: rgba(109,94,240,0.12); border: 1px solid rgba(109,94,240,0.3); padding: 7px 14px; border-radius: 100px; }
+  .badge-pill svg { width: 13px; height: 13px; }
   .forge-seam { height: 2px; border-radius: 2px; margin: 0 0 36px; background: linear-gradient(90deg, transparent, var(--arcane), var(--ember), var(--arcane), transparent); background-size: 200% 100%; animation: seamFlow 9s linear infinite; opacity: 0.85; }
   @keyframes seamFlow { to { background-position: 200% 0; } }
-  .grid { display: grid; grid-template-columns: 1fr; max-width: 1000px; margin: auto; gap: 28px; width: 100%; flex: 1; }
+  @media (prefers-reduced-motion: reduce) { .forge-seam { animation: none; } .loading svg { animation: none; } }
+
+  .grid { display: grid; grid-template-columns: 1fr; max-width: 1000px; margin: auto; gap: 28px; align-items: start; width: 100%; flex: 1; }
   @media (min-width: 768px) { .grid { grid-template-columns: 360px 1fr; } }
-  .sticky-preview { position: sticky; top: 20px; }
+  .sticky-preview { position: -webkit-sticky; position: sticky; top: 20px; }
   .panel { background: var(--panel); backdrop-filter: blur(20px) saturate(140%); padding: 26px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); }
+
   label { display: block; margin-top: 16px; margin-bottom: 6px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; color: var(--steel); }
-  input, select, textarea { width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--off); padding: 12px 14px; border-radius: var(--radius-sm); color: var(--text); font-size: 0.9rem; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; padding: 11px 16px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; }
-  .btn-primary { background: linear-gradient(135deg, var(--arcane), var(--ember)); color: #fff; }
+  input, select, textarea { width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--off); padding: 12px 14px; border-radius: var(--radius-sm); color: var(--text); margin-top: 0; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: border-color .15s ease, box-shadow .15s ease; }
+  input:focus, select:focus, textarea:focus { border-color: var(--arcane); box-shadow: 0 0 0 3px rgba(109,94,240,0.18); outline: none; }
+  textarea { resize: vertical; min-height: 54px; }
+  select { cursor: pointer; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.84rem; font-weight: 700; padding: 11px 16px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; transition: filter .15s ease, transform .15s ease, background .15s ease; white-space: nowrap; }
+  .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .btn-block { width: 100%; }
+  .btn-lg { padding: 13px 18px; font-size: 0.88rem; }
+  .btn-primary { background: linear-gradient(135deg, var(--arcane), var(--ember)); color: #fff; box-shadow: 0 10px 22px -6px rgba(109,94,240,0.55); }
+  .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
   .btn-secondary { background: var(--panel-2); color: var(--text); border-color: var(--border); }
-  .btn-danger { background: rgba(239,68,68,0.13); color: #f87171; border-color: rgba(239,68,68,0.28); }
-  .icon-btn { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--steel); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
-  .adv-toggle { margin-top: 22px; padding: 13px 14px; border-radius: var(--radius-sm); background: var(--panel-2); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+  .btn-success { background: rgba(34,197,94,0.14); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+  .btn-success:hover { background: rgba(34,197,94,0.22); }
+  .btn-danger { background: var(--danger-soft); color: #f87171; border-color: rgba(239,68,68,0.28); }
+  .btn-danger:hover { background: rgba(239,68,68,0.22); }
+  .btn-amber { background: rgba(245,158,11,0.14); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
+  .btn-amber:hover { background: rgba(245,158,11,0.22); }
+  .icon-btn { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--steel); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s ease; padding: 0; }
+  .icon-btn:hover { background: rgba(255,255,255,0.13); color: var(--text); transform: translateY(-1px); }
+  .icon-btn.danger:hover { background: rgba(239,68,68,0.16); color: #f87171; border-color: rgba(239,68,68,0.32); }
+  .icon-btn svg { width: 16px; height: 16px; }
+
+  .profiles-box { margin-top: 18px; background: var(--panel-2); border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-md); }
+  .profiles-row { display: flex; gap: 8px; }
+
+  .adv-toggle { margin-top: 22px; padding: 13px 14px; border-radius: var(--radius-sm); background: var(--panel-2); border: 1px solid var(--border); cursor: pointer; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; justify-content: space-between; transition: background .15s ease; }
+  .adv-toggle:hover { background: rgba(255,255,255,0.08); }
+  .adv-toggle .left { display: flex; align-items: center; gap: 10px; }
+  .adv-toggle svg.gear { width: 17px; height: 17px; color: var(--arcane-2); }
+  .adv-toggle svg.chev { width: 15px; height: 15px; color: var(--steel); transition: transform .2s ease; }
+  .adv-toggle.open svg.chev { transform: rotate(180deg); }
   #adv { display: none; }
-  .card-render { width: 280px; height: 392px; border-radius: 10px; background: white; color: black; padding: 5px; border: 4px solid #cbd5e1; margin: auto; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
-  .img-frame { position: relative; width: 230px; height: 190px; border: 2px solid #cbd5e1; border-radius: 6px; margin-top: 54px; display: flex; align-items: center; justify-content: center; background: #eef1f6; }
+
+  .adv-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .adv-section:first-child { margin-top: 18px; padding-top: 0; border-top: none; }
+  .adv-section h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+  .adv-section h4 svg { width: 14px; height: 14px; color: var(--ember); flex-shrink: 0; }
+
+  .switch-row { display: flex; align-items: center; justify-content: space-between; margin: 14px 0; font-size: 0.85rem; color: var(--text); }
+  .switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--off); transition: .25s; border-radius: 22px; }
+  .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .25s; border-radius: 50%; }
+  input:checked + .slider { background-color: var(--on); }
+  input:checked + .slider:before { transform: translateX(18px); }
+
+  .color-field { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--steel); margin-top: 0; }
+  .color-field input[type="color"] { width: 32px; height: 32px; padding: 2px; border-radius: 8px; cursor: pointer; flex-shrink: 0; }
+  .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .stat-input-pair { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 10px; align-items: center; }
+
+  .card-render { width: 280px; height: 392px; border-radius: 10px; background: white; color: black; padding: 5px; border: 4px solid #cbd5e1; margin: auto; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; background-size: cover; background-position: center; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4), var(--shadow-md); }
+  .img-frame { position: relative; width: 230px; height: 190px; border: 2px solid #cbd5e1; border-radius: 6px; margin-top: 54px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background-color: #eef1f6; }
   .card-render img { width: 100%; height: 100%; object-fit: cover; display: none; }
-  .loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; background:rgba(255,255,255,0.8); font-size: 0.7rem; font-weight:bold; color:#666; z-index:30; }
-  .text-box { background: rgba(255, 255, 255, 0.95); border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 0.82rem; text-align: center; }
-  .name-box { position: absolute; top: 10px; width: 152px; height: 30px; font-weight: 800; z-index: 5; border-radius: 6px; }
-  #galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 26px; padding: 24px; max-width: 1000px; margin: 8px auto 50px; border: 1.5px dashed var(--border); border-radius: var(--radius-lg); }
-  .card-wrapper { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 18px; border: 1px solid var(--border); width: 320px; display: flex; flex-direction: column; align-items: center; }
+  .icon-shape { position: absolute; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; z-index: 10; font-size: 0.8rem; box-shadow: 0 3px 8px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.8); }
+  .icon-shape.heart { border-radius: 50%; }
+  .icon-shape.shield { border-radius: 8px 8px 14px 14px; }
+  .tl { top: 10px; left: 10px; }
+  .tr { top: 10px; right: 10px; }
+  .text-box { background: rgba(255, 255, 255, 0.95); border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 0.82rem; line-height: 1.25; color: #18181b; text-align: center; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .name-box { position: absolute; top: 10px; width: 152px; height: 30px; font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; z-index: 5; background: rgba(255,255,255,0.92); border: 1px solid #cbd5e1; border-radius: 6px; }
+  .lore-box { width: 230px; height: 56px; margin-top: 14px; border-radius: 8px 8px 0 0; border-bottom: 1px dashed rgba(0,0,0,0.18); font-size: 0.74rem; font-weight: 400; color: #52525b; flex-shrink: 0; }
+  .effect-box { width: 230px; height: 56px; margin-top: 4px; border-top: none; border-radius: 0 0 8px 8px; font-weight: 600; flex-shrink: 0; padding: 4px; }
+  .shiny-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.6) 100%); pointer-events: none; opacity: 0; z-index: 20; border-radius: 6px; }
+  .is-glossy .shiny-overlay { opacity: 1; animation: shineAnim 3s infinite linear; }
+  @keyframes shineAnim { 0% { background-position: 200% 200%; } 100% { background-position: -200% -200%; } }
+  .hide-lore #displayLore { display: none; }
+  .hide-lore #displayEffet { flex-grow: 0; height: 112px; margin-top: 14px; border-radius: 8px; border-top: 1px solid #cbd5e1; }
+
+  .gallery-heading { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 16px; color: var(--steel); }
+  #galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); justify-items: center; gap: 26px; padding: 24px; max-width: 1000px; margin: 8px auto 50px; min-height: 200px; border: 1.5px dashed var(--border); border-radius: var(--radius-lg); width: 95%; }
+  .card-wrapper { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 18px; border: 1px solid var(--border); text-align: center; width: 320px; cursor: grab; display: flex; flex-direction: column; align-items: center; transition: transform .2s ease, box-shadow .2s ease; }
+  .controls { display: flex; justify-content: center; gap: 8px; margin-top: 16px; width: 100%; }
+  #placeholder { grid-column: 1/-1; text-align: center; color: var(--steel-dim); padding: 60px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+  #toastContainer { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 99999; align-items: center; }
+  .toast { background: #1c1c22; border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.83rem; font-weight: 600; box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 8px; }
+  footer { margin-top: auto; padding: 36px 20px 28px; text-align: center; color: var(--steel-dim); font-size: 0.74rem; border-top: 1px solid rgba(255,255,255,0.06); }
 </style>
 </head>
 <body>
 
-<div id="toastContainer" style="position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:9999;"></div>
+<div id="toastContainer"></div>
 
 <div class="app-shell">
   <div class="app-header">
     <div class="brand">
-      <div class="logo-mark"><svg viewBox="0 0 24 24" width="26" height="26" fill="none"><rect x="3" y="6.5" width="13" height="16" rx="2.5" fill="rgba(255,255,255,0.4)"/><rect x="7.5" y="3" width="13" height="16" rx="2.5" fill="white"/></svg></div>
-      <div><h1 class="site-title">CardForge <span class="accent-word">AI</span></h1></div>
+      <div class="logo-mark"><svg viewBox="0 0 24 24" width="26" height="26" fill="none"><rect x="3" y="6.5" width="13" height="16" rx="2.5" transform="rotate(-9 3 6.5)" fill="rgba(255,255,255,0.4)"/><rect x="7.5" y="3" width="13" height="16" rx="2.5" fill="white"/><path d="M14 7l1.05 2.3 2.45.4-1.8 1.7.4 2.5-2.1-1.2-2.1 1.2.4-2.5-1.8-1.7 2.45-.4L14 7z" fill="#f5793a"/></svg></div>
+      <div><h1 class="site-title">CardForge <span class="accent-word">AI</span></h1><p class="eyebrow" id="slogan">FORGEZ DES CARTES LÉGENDAIRES</p></div>
     </div>
   </div>
   <div class="forge-seam"></div>
@@ -64,65 +173,96 @@
 
 <div class="grid">
   <div class="panel">
-    <label>NOM</label><input type="text" id="nomInput" oninput="updateApercu()">
-    <label>PROMPT (IA)</label><input type="text" id="promptInput">
-    <label>LORE</label><textarea id="loreInput" oninput="updateApercu()"></textarea>
-    <label>EFFET</label><textarea id="effetInput" oninput="updateApercu()"></textarea>
-    <button id="genBtn" class="btn btn-primary btn-block btn-lg" onclick="generer()">Forger les cartes</button>
+    <label>NOM</label><input type="text" id="nomInput" oninput="updateApercu()" maxlength="20">
+    <label>LORE</label><textarea id="loreInput" oninput="updateApercu()" maxlength="90"></textarea>
+    <label>EFFET</label><textarea id="effetInput" oninput="updateApercu()" maxlength="90"></textarea>
+    <label>PROMPT (IA)</label><input type="text" id="promptInput" placeholder="Ex: Guerrier Solaire en armure">
+    <label>SEED</label><input type="number" id="seedInput" oninput="updateApercu()">
+    
+    <div class="adv-toggle" onclick="toggleAdv()" id="advBtn"><span>Paramètres avancés</span></div>
+    <div id="adv">
+      <label>Thème artistique</label>
+      <select id="themeSelect">
+        <option value="Fantasy">Heroic Fantasy</option>
+        <option value="Cyberpunk">Cyberpunk</option>
+        <option value="Anime">Anime</option>
+      </select>
+    </div>
+
+    <button id="genBtn" class="btn btn-primary btn-block btn-lg" style="margin-top:22px;" onclick="generer()">Forger les cartes</button>
   </div>
-  <div class="sticky-preview">
+
+  <div style="text-align:center;" class="sticky-preview">
     <div id="carte" class="card-render">
-      <div id="displayNom" class="text-box name-box">NAME</div>
-      <div id="imgFrame" class="img-frame">
-        <div id="loadingOverlay" class="loading-overlay">GÉNÉRATION...</div>
-        <img id="displayImg" src="">
-      </div>
-      <div id="displayLore" class="text-box" style="width:230px; height:56px; margin-top:14px;">Lore...</div>
-      <div id="displayEffet" class="text-box" style="width:230px; height:56px; margin-top:4px;">Effect...</div>
+        <div id="displayNom" class="text-box name-box">NAME</div>
+        <div id="imgFrame" class="img-frame">
+          <div class="shiny-overlay"></div><img id="displayImg" src="">
+        </div>
+        <div id="displayLore" class="text-box lore-box">Lore...</div>
+        <div id="displayEffet" class="text-box effect-box">Effect...</div>
     </div>
   </div>
 </div>
 
-<div id="galerie"></div>
+<div id="galerie">
+    <div id="placeholder"><p>Vos cartes apparaîtront ici</p></div>
+</div>
 
 <script>
-  // API Pollinations Integration
+  // Fonctions de l'API Pollinations
   async function imageGenerator(prompt) {
+    const encodedPrompt = encodeURIComponent(prompt);
     const seed = Math.floor(Math.random() * 1000000);
-    // On génère l'URL de l'image via Pollinations
-    return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt + ", high quality, professional illustration, game art")}%20?width=1024&height=1024&seed=${seed}&nologo=true`;
+    // Utilisation de l'API Pollinations avec seed pour la cohérence
+    const url = `https://image.pollinations.ai/prompt/${encodedPrompt}?seed=${seed}&width=1024&height=1024&nologo=true`;
+    return url;
+  }
+
+  function showLoadingState(element, isLoading) {
+    if (isLoading) {
+      element.classList.add('loading');
+    } else {
+      element.classList.remove('loading');
+    }
   }
 
   async function generer() {
     const btn = document.getElementById('genBtn');
-    const img = document.getElementById('displayImg');
-    const overlay = document.getElementById('loadingOverlay');
+    const prompt = document.getElementById('promptInput').value || "Mystical character";
     
-    btn.disabled = true;
-    overlay.style.display = 'flex';
-    img.style.display = 'none';
-    
+    showLoadingState(btn, true);
+    document.getElementById('placeholder').style.display = 'none';
+
     try {
-      const prompt = document.getElementById('promptInput').value || "mystical fantasy creature";
       const url = await imageGenerator(prompt);
-      
-      img.src = url;
-      img.onload = () => {
-        overlay.style.display = 'none';
-        img.style.display = 'block';
-      };
+      const div = document.createElement('div');
+      div.className = 'card-wrapper';
+      div.innerHTML = `
+        <div class="card-render">
+           <div class="text-box name-box">${document.getElementById('nomInput').value}</div>
+           <div class="img-frame"><img src="${url}" style="display:block"></div>
+           <div class="text-box lore-box">${document.getElementById('loreInput').value}</div>
+        </div>
+        <button onclick="this.parentElement.remove()">Supprimer</button>
+      `;
+      document.getElementById('galerie').appendChild(div);
     } catch (e) {
-      overlay.textContent = "ERREUR";
-      setTimeout(() => overlay.style.display = 'none', 2000);
+      alert("Erreur de génération");
     } finally {
-      btn.disabled = false;
+      showLoadingState(btn, false);
     }
   }
 
-  function updateApercu() {
-    document.getElementById('displayNom').innerText = document.getElementById('nomInput').value || 'NAME';
-    document.getElementById('displayLore').innerText = document.getElementById('loreInput').value || 'Lore...';
-    document.getElementById('displayEffet').innerText = document.getElementById('effetInput').value || 'Effect...';
+  async function genererDos() {
+    const url = await imageGenerator("ornate symmetrical magic card back design");
+    // Logique pour ajouter le dos de carte...
+  }
+
+  function toggleAdv() { document.getElementById('adv').style.display = document.getElementById('adv').style.display === 'block' ? 'none' : 'block'; }
+  function updateApercu() { 
+      document.getElementById('displayNom').innerText = document.getElementById('nomInput').value || 'NAME';
+      document.getElementById('displayLore').innerText = document.getElementById('loreInput').value || 'Lore...';
+      document.getElementById('displayEffet').innerText = document.getElementById('effetInput').value || 'Effect...';
   }
 </script>
 </body>
