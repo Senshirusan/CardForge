@@ -174,8 +174,7 @@
   .gallery-heading { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 16px; color: var(--steel); }
   .gallery-heading svg { width: 16px; height: 16px; color: var(--ember); }
   .gallery-heading span { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-  #galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); justify-items: center; gap: 26px; padding: 24px; max-width: 1000px; margin: 8px auto 50px; min-height: 200px; border: 1.5px dashed var(--border); border-radius: var(--radius-lg); width: 95%; position: relative; transition: opacity 0.3s ease; }
-  #galerie.loading-gallery { opacity: 0.5; cursor: wait; }
+  #galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); justify-items: center; gap: 26px; padding: 24px; max-width: 1000px; margin: 8px auto 50px; min-height: 200px; border: 1.5px dashed var(--border); border-radius: var(--radius-lg); width: 95%; }
   .card-wrapper { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 18px; border: 1px solid var(--border); text-align: center; width: 320px; cursor: grab; display: flex; flex-direction: column; align-items: center; transition: transform .2s ease, box-shadow .2s ease; }
   .card-wrapper:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
   .card-wrapper.dragging { opacity: 0.45; transform: scale(0.93); }
@@ -575,19 +574,16 @@
 
   async function generer() {
     const btn = document.getElementById('genBtn');
-    const gal = document.getElementById('galerie');
     const label = document.getElementById('genBtnText');
     const l = curLang();
     document.getElementById('placeholder').style.display = 'none';
     btn.classList.add('loading'); btn.disabled = true; label.textContent = d[l].genLoad;
-    gal.classList.add('loading-gallery');
     try {
       for(let i=0; i<parseInt(document.getElementById('nbCartes').value); i++) document.getElementById('galerie').appendChild(await createCardElement());
     } catch (err) {
       console.error(err); showToast(d[l].toastError, 'error');
     } finally {
       btn.classList.remove('loading'); btn.disabled = false; label.textContent = d[l].gen;
-      gal.classList.remove('loading-gallery');
     }
     save();
   }
