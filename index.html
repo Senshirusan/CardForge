@@ -13,11 +13,7 @@
   :root { --bg: #08080c; --panel: rgba(22, 22, 28, 0.72); --panel-2: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.09); --arcane: #6d5ef0; --arcane-2: #8b7bf7; --ember: #f5793a; --ember-2: #fbbf24; --text: #f5f5f7; --steel: #9a9aa6; --steel-dim: #6c6c78; --off: #34343d; --on: var(--arcane); --danger: #ef4444; --danger-soft: rgba(239,68,68,0.13); --success: #22c55e; --radius-lg: 22px; --radius-md: 14px; --radius-sm: 10px; --shadow-lg: 0 24px 60px -20px rgba(0,0,0,0.55); --shadow-md: 0 12px 28px -10px rgba(0,0,0,0.45); }
   * { box-sizing: border-box; }
   body { background: var(--bg); background-image: radial-gradient(circle at 18% -10%, rgba(109,94,240,0.22) 0%, transparent 45%), radial-gradient(circle at 85% 0%, rgba(245,121,58,0.14) 0%, transparent 40%); background-attachment: fixed; color: var(--text); font-family: 'Inter', sans-serif; padding: 28px 20px 0; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-  button { font-family: 'Inter', sans-serif; } button:active { transform: scale(0.97); } a { color: inherit; }
-  ::placeholder { color: var(--steel-dim); opacity: 1; }
-  .loading { opacity: 0.7; pointer-events: none; cursor: wait; }
-  .loading svg { animation: spin 0.85s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  button { font-family: 'Inter', sans-serif; } button:active { transform: scale(0.97); } a { color: inherit; } ::placeholder { color: var(--steel-dim); opacity: 1; } :focus-visible { outline: 2px solid var(--arcane-2); outline-offset: 2px; } .loading { opacity: 0.7; pointer-events: none; cursor: wait; } .loading svg { animation: spin 0.85s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } }
   .app-shell { max-width: 1000px; width: 100%; margin: 0 auto; }
   .app-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
   .brand { display: flex; align-items: center; gap: 14px; }
@@ -28,28 +24,27 @@
   .badge-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: var(--arcane-2); background: rgba(109,94,240,0.12); border: 1px solid rgba(109,94,240,0.3); padding: 7px 14px; border-radius: 100px; }
   .forge-seam { height: 2px; border-radius: 2px; margin: 0 0 36px; background: linear-gradient(90deg, transparent, var(--arcane), var(--ember), var(--arcane), transparent); background-size: 200% 100%; animation: seamFlow 9s linear infinite; opacity: 0.85; }
   @keyframes seamFlow { to { background-position: 200% 0; } }
-  .grid { display: grid; grid-template-columns: 1fr; max-width: 1000px; margin: auto; gap: 28px; width: 100%; flex: 1; }
+  .grid { display: grid; grid-template-columns: 1fr; max-width: 1000px; margin: auto; gap: 28px; align-items: start; width: 100%; flex: 1; }
   @media (min-width: 768px) { .grid { grid-template-columns: 360px 1fr; } }
   .sticky-preview { position: sticky; top: 20px; }
   .panel { background: var(--panel); backdrop-filter: blur(20px) saturate(140%); padding: 26px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); }
-  label { display: block; margin-top: 16px; margin-bottom: 6px; font-size: 0.78rem; font-weight: 700; color: var(--steel); }
-  input, select, textarea { width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--off); padding: 12px 14px; border-radius: var(--radius-sm); color: var(--text); font-family: 'Inter', sans-serif; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.84rem; font-weight: 700; padding: 11px 16px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; }
-  .btn-block { width: 100%; }
+  label { display: block; margin-top: 16px; margin-bottom: 6px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; color: var(--steel); }
+  input, select, textarea { width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--off); padding: 12px 14px; border-radius: var(--radius-sm); color: var(--text); margin-top: 0; font-size: 0.9rem; font-family: 'Inter', sans-serif; }
+  input:focus, select:focus, textarea:focus { border-color: var(--arcane); box-shadow: 0 0 0 3px rgba(109,94,240,0.18); outline: none; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.84rem; font-weight: 700; padding: 11px 16px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; transition: all .15s ease; width: 100%; }
   .btn-primary { background: linear-gradient(135deg, var(--arcane), var(--ember)); color: #fff; }
+  .btn-secondary { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+  .btn-danger { background: var(--danger-soft); color: #f87171; border: 1px solid rgba(239,68,68,0.28); }
+  .btn-success { background: rgba(34,197,94,0.14); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .btn-amber { background: rgba(245,158,11,0.14); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
   .icon-btn { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--steel); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
   .adv-toggle { margin-top: 22px; padding: 13px 14px; border-radius: var(--radius-sm); background: var(--panel-2); border: 1px solid var(--border); cursor: pointer; font-weight: 700; display: flex; justify-content: space-between; }
   #adv { display: none; }
-  .adv-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--border); }
   .card-render { width: 280px; height: 392px; border-radius: 10px; background: white; color: black; padding: 5px; border: 4px solid #cbd5e1; margin: auto; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; background-size: cover; background-position: center; }
   .img-frame { position: relative; width: 230px; height: 190px; border: 2px solid #cbd5e1; border-radius: 6px; margin-top: 54px; overflow: hidden; background-color: #eef1f6; display: flex; align-items: center; justify-content: center; }
   .card-render img { width: 100%; height: 100%; object-fit: cover; display: none; }
-  .text-box { background: rgba(255,255,255,0.95); border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 0.82rem; text-align: center; }
-  .name-box { position: absolute; top: 10px; width: 152px; font-weight: 800; border-radius: 6px; }
-  .shiny-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.6) 100%); pointer-events: none; opacity: 0; }
-  .is-glossy .shiny-overlay { opacity: 1; animation: shineAnim 3s infinite linear; }
-  @keyframes shineAnim { 0% { background-position: 200% 200%; } 100% { background-position: -200% -200%; } }
-  #galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 26px; padding: 24px; max-width: 1000px; margin: 8px auto 50px; border: 1.5px dashed var(--border); border-radius: var(--radius-lg); }
+  .text-box { background: rgba(255, 255, 255, 0.95); border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 0.82rem; text-align: center; }
+  #galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 26px; padding: 24px; max-width: 1000px; margin: 8px auto 50px; border: 1.5px dashed var(--border); border-radius: 22px; }
   .card-wrapper { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 18px; border: 1px solid var(--border); text-align: center; width: 320px; }
   #toastContainer { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 99999; }
   .toast { background: #1c1c22; border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.83rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
@@ -64,7 +59,6 @@
       <div><h1 class="site-title">CardForge <span class="accent-word">AI</span></h1></div>
     </div>
   </div>
-  <div class="forge-seam"></div>
 </div>
 
 <div class="grid">
@@ -72,27 +66,25 @@
     <label>NOM</label> <input type="text" id="nomInput" oninput="updateApercu()">
     <label>LORE</label> <textarea id="loreInput" oninput="updateApercu()"></textarea>
     <label>PROMPT</label> <input type="text" id="promptInput">
-    <button id="genBtn" class="btn btn-primary btn-block" onclick="generer()">Forger les cartes</button>
+    <button id="genBtn" class="btn btn-primary" onclick="generer()">FORGER LA CARTE</button>
     <div class="adv-toggle" onclick="document.getElementById('adv').style.display=(document.getElementById('adv').style.display==='block'?'none':'block')">Paramètres avancés</div>
     <div id="adv">
-      <label>Thème</label>
-      <select id="themeSelect"><option value="Fantasy">Fantasy</option><option value="Cyberpunk">Cyberpunk</option></select>
-      <button class="btn" onclick="genererFondIA()">Habillage (Thème IA)</button>
-      <button class="btn" onclick="genererDos()">Forger le dos</button>
+      <select id="themeSelect"><option value="Heroic Fantasy">Fantasy</option><option value="Cyberpunk">Cyberpunk</option></select>
+      <button class="btn btn-secondary" onclick="genererFondIA()">Appliquer Habillage</button>
+      <button class="btn btn-secondary" onclick="genererDos()">Forger le dos</button>
     </div>
   </div>
   <div class="sticky-preview">
     <div id="carte" class="card-render">
-      <div id="displayNom" class="text-box name-box">NAME</div>
-      <div id="imgFrame" class="img-frame"><div class="shiny-overlay"></div><img id="displayImg" src=""></div>
-      <div id="displayLore" class="text-box" style="width:230px; margin-top:10px;">Lore...</div>
+      <div id="displayNom" class="text-box" style="width:150px; margin-top:10px; font-weight:800;">NAME</div>
+      <div class="img-frame"><img id="displayImg" src=""></div>
     </div>
   </div>
 </div>
 <div id="galerie"></div>
 
 <script>
-  // -- LOGIQUE POLLINATIONS --
+  // -- LOGIQUE POLLINATIONS CORRIGÉE --
   async function imageGenerator(prompt) {
       const seed = Math.floor(Math.random() * 1000000);
       return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=${seed}&width=1024&height=1024&nologo=true`;
@@ -100,29 +92,28 @@
 
   function updateApercu() {
       document.getElementById('displayNom').innerText = document.getElementById('nomInput').value || 'NAME';
-      document.getElementById('displayLore').innerText = document.getElementById('loreInput').value || 'Lore...';
   }
 
   async function genererFondIA() {
       const theme = document.getElementById("themeSelect").value;
       const url = await imageGenerator(`professional TCG background, themed ${theme}, high quality`);
-      document.getElementById('carte').style.backgroundImage = `url('${url}')`;
-      document.getElementById('carte').style.backgroundSize = "cover";
-      document.getElementById('carte').style.backgroundPosition = "center";
+      const carte = document.getElementById('carte');
+      carte.style.backgroundImage = `url('${url}')`;
+      carte.style.backgroundSize = "cover";
+      carte.style.backgroundPosition = "center";
   }
 
   async function genererDos() {
       const url = await imageGenerator("ornate symmetrical fantasy card back");
-      const galerie = document.getElementById('galerie');
       const div = document.createElement('div');
       div.className = 'card-wrapper';
       div.innerHTML = `<div class="card-render" style="background:url('${url}') center/cover"></div>`;
-      galerie.appendChild(div);
+      document.getElementById('galerie').appendChild(div);
   }
 
   async function generer() {
     const btn = document.getElementById('genBtn');
-    btn.classList.add('loading');
+    btn.innerText = "Forge en cours...";
     try {
         const url = await imageGenerator(document.getElementById("promptInput").value);
         const galerie = document.getElementById('galerie');
@@ -134,7 +125,7 @@
         img.style.display = "block";
         galerie.appendChild(div);
     } finally {
-        btn.classList.remove('loading');
+        btn.innerText = "FORGER LA CARTE";
     }
   }
 </script>
