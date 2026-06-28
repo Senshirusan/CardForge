@@ -108,10 +108,6 @@
   .icon-btn.danger:hover { background: rgba(239,68,68,0.16); color: #f87171; border-color: rgba(239,68,68,0.32); }
   .icon-btn svg { width: 16px; height: 16px; }
 
-  /* ---------- Inline tools row ---------- */
-  .tool-row { display: flex; gap: 8px; margin-top: 8px; }
-  .tool-row input { flex: 1; }
-
   /* ---------- Profiles ---------- */
   .profiles-box { margin-top: 18px; background: var(--panel-2); border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-md); }
   .profiles-box label { margin-top: 0; }
@@ -163,12 +159,8 @@
   .name-box { position: absolute; top: 10px; width: 152px; height: 30px; font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; z-index: 5; background: rgba(255,255,255,0.92); border: 1px solid #cbd5e1; border-radius: 6px; }
   .lore-box { width: 230px; height: 56px; margin-top: 14px; border-radius: 8px 8px 0 0; border-bottom: 1px dashed rgba(0,0,0,0.18); font-size: 0.74rem; font-weight: 400; color: #52525b; flex-shrink: 0; }
   .effect-box { width: 230px; height: 56px; margin-top: 4px; border-top: none; border-radius: 0 0 8px 8px; font-weight: 600; flex-shrink: 0; padding: 4px; }
-  .shiny-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.6) 100%); pointer-events: none; opacity: 0; z-index: 20; border-radius: 6px; }
-  .is-glossy .shiny-overlay { opacity: 1; animation: shineAnim 3s infinite linear; }
-  @keyframes shineAnim { 0% { background-position: 200% 200%; } 100% { background-position: -200% -200%; } }
   .hide-lore #displayLore { display: none; }
   .hide-lore #displayEffet { flex-grow: 0; height: 112px; margin-top: 14px; border-radius: 8px; border-top: 1px solid #cbd5e1; }
-  @media (prefers-reduced-motion: reduce) { .is-glossy .shiny-overlay { animation: none; opacity: 0.5; } }
 
   /* ---------- Gallery ---------- */
   .gallery-heading { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 16px; color: var(--steel); }
@@ -334,7 +326,6 @@
         <div class="switch-row"><span id="lNombre">Nombre</span> <select id="nbCartes" style="width:64px;"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></div>
         <div class="switch-row"><span id="lShowLore">Lore</span> <label class="switch"><input type="checkbox" id="showLore" checked onchange="updateApercu()"><span class="slider"></span></label></div>
         <div class="switch-row"><span id="lShiny">Shiny</span> <label class="switch"><input type="checkbox" id="isShiny" onchange="updateApercu()"><span class="slider"></span></label></div>
-        <div class="switch-row"><span id="lGlossy">Glossy</span> <label class="switch"><input type="checkbox" id="isGlossy" onchange="updateApercu()"><span class="slider"></span></label></div>
       </div>
 
       <div class="adv-section">
@@ -380,7 +371,7 @@
     <div id="carte" class="card-render">
         <div id="displayNom" class="text-box name-box" style="font-weight:800;">NAME</div>
         <div id="imgFrame" class="img-frame">
-          <div class="shiny-overlay"></div> <img id="displayImg" src="">
+          <img id="displayImg" src="">
         </div>
         <div id="displayLore" class="text-box lore-box">Lore...</div>
         <div id="displayEffet" class="text-box effect-box" style="flex-grow:0;">Effect...</div>
@@ -416,9 +407,9 @@
     errorIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
   };
   const d = {
-    fr: { s:"FORGEZ DES CARTES LÉGENDAIRES", n:"NOM", l:"LORE (Histoire)", e:"EFFET (Capacité)", p:"PROMPT (IA)", c:"Copier le prompt", prof:"Profils", adv:"Paramètres avancés", lang:"Langue", ft:"Fond", hab:"Habillage (Thème IA)", f:"Fond", b:"Bordure", nb:"Nombre", sl:"Lore", sh:"Shiny", gl:"Glossy", il:"Icône G (gauche)", ir:"Icône D (droite)", dos:"Forger le dos de carte", del:"Effacer la galerie", ep:"Exporter en PNG (A4)", pdf:"Exporter en PDF (A4)", gen:"Forger les cartes", genLoad:"Forge en cours…", pre:"Aperçu en direct", pl:"Vos cartes générées apparaîtront ici", cr:"La structure et la logique du code sont la propriété de l'auteur.", theme:"Thème artistique", res:"Résolution d'export", secType:"Typographie", secTheme:"Thème & apparence", secDisplay:"Affichage de la carte", secStats:"Statistiques", secExport:"Export & qualité", galTitle:"Votre collection", toastCopied:"Prompt copié dans le presse-papiers", toastNeedName:"Donnez un nom à ce profil", toastSaved:"Profil sauvegardé", toastDeleted:"Profil supprimé", toastNeedSelect:"Sélectionnez un profil à supprimer", toastEmpty:"La galerie est vide", toastUsePdf:"Pour un alignement recto-verso parfait, utilisez plutôt « Exporter en PDF »", profPh:"Charger un profil…", confirmClear:"Effacer toute la galerie ? Cette action est irréversible.", toastError:"La génération a échoué. Vérifiez la connexion à l'IA." },
-    en: { s:"FORGE LEGENDARY CARDS", n:"NAME", l:"LORE (Story)", e:"EFFECT (Ability)", p:"PROMPT (AI)", c:"Copy prompt", prof:"Profiles", adv:"Advanced settings", lang:"Language", ft:"Background", hab:"Skin (AI Theme)", f:"BG", b:"Border", nb:"Count", sl:"Lore", sh:"Shiny", gl:"Glossy", il:"Icon L", ir:"Icon R", dos:"Forge card back", del:"Clear gallery", ep:"Export PNG (A4)", pdf:"Export PDF (A4)", gen:"Forge cards", genLoad:"Forging…", pre:"Live preview", pl:"Your generated cards will appear here", cr:"The structure and code logic are the property of the author.", theme:"Art theme", res:"Export resolution", secType:"Typography", secTheme:"Theme & appearance", secDisplay:"Card display", secStats:"Stats", secExport:"Export & quality", galTitle:"Your collection", toastCopied:"Prompt copied to clipboard", toastNeedName:"Give this profile a name", toastSaved:"Profile saved", toastDeleted:"Profile deleted", toastNeedSelect:"Select a profile to delete", toastEmpty:"The gallery is empty", toastUsePdf:"For perfect front/back alignment, use “Export PDF” instead", profPh:"Load a profile…", confirmClear:"Clear the entire gallery? This action can't be undone.", toastError:"Generation failed. Check the AI connection." },
-    pt: { s:"FORJE CARTAS LENDÁRIAS", n:"NOME", l:"LORE (História)", e:"EFEITO (Capacidade)", p:"PROMPT (IA)", c:"Copiar prompt", prof:"Perfis", adv:"Definições avançadas", lang:"Idioma", ft:"Fundo", hab:"Skin (Tema IA)", f:"Fundo", b:"Borda", nb:"Número", sl:"Lore", sh:"Shiny", gl:"Glossy", il:"Ícone E", ir:"Ícone D", dos:"Forjar verso da carta", del:"Limpar galeria", ep:"Exportar PNG (A4)", pdf:"Exportar PDF (A4)", gen:"Forjar cartas", genLoad:"A forjar…", pre:"Pré-visualização", pl:"As suas cartas geradas aparecerão aqui", cr:"A estrutura e a lógica do código são propriedade do autor.", theme:"Tema artístico", res:"Resolução de exportação", secType:"Tipografia", secTheme:"Tema & aparência", secDisplay:"Exibição da carta", secStats:"Estatísticas", secExport:"Exportação & qualidade", galTitle:"A sua coleção", toastCopied:"Prompt copiado para a área de transferência", toastNeedName:"Dê um nome a este perfil", toastSaved:"Perfil guardado", toastDeleted:"Perfil eliminado", toastNeedSelect:"Selecione um perfil para eliminar", toastEmpty:"A galeria está vazia", toastUsePdf:"Para um alinhamento frente/verso perfeito, use “Exportar PDF”", profPh:"Carregar um perfil…", confirmClear:"Limpar toda a galeria? Esta ação não pode ser desfeita.", toastError:"A geração falhou. Verifique a ligação à IA." }
+    fr: { s:"FORGEZ DES CARTES LÉGENDAIRES", n:"NOM", l:"LORE (Histoire)", e:"EFFET (Capacité)", p:"PROMPT (IA)", c:"Copier le prompt", prof:"Profils", adv:"Paramètres avancés", lang:"Langue", ft:"Fond", hab:"Habillage (Thème IA)", f:"Fond", b:"Bordure", nb:"Nombre", sl:"Lore", sh:"Shiny", il:"Icône G (gauche)", ir:"Icône D (droite)", dos:"Forger le dos de carte", del:"Effacer la galerie", ep:"Exporter en PNG (A4)", pdf:"Exporter en PDF (A4)", gen:"Forger les cartes", genLoad:"Forge en cours…", pre:"Aperçu en direct", pl:"Vos cartes générées apparaîtront ici", cr:"La structure et la logique du code sont la propriété de l'auteur.", theme:"Thème artistique", res:"Résolution d'export", secType:"Typographie", secTheme:"Thème & apparence", secDisplay:"Affichage de la carte", secStats:"Statistiques", secExport:"Export & qualité", galTitle:"Votre collection", toastCopied:"Prompt copié dans le presse-papiers", toastNeedName:"Donnez un nom à ce profil", toastSaved:"Profil sauvegardé", toastDeleted:"Profil supprimé", toastNeedSelect:"Sélectionnez un profil à supprimer", toastEmpty:"La galerie est vide", toastUsePdf:"Pour un alignement recto-verso parfait, utilisez plutôt « Exporter en PDF »", profPh:"Charger un profil…", confirmClear:"Effacer toute la galerie ? Cette action est irréversible.", toastError:"La génération a échoué. Vérifiez la connexion à l'IA." },
+    en: { s:"FORGE LEGENDARY CARDS", n:"NAME", l:"LORE (Story)", e:"EFFECT (Ability)", p:"PROMPT (AI)", c:"Copy prompt", prof:"Profiles", adv:"Advanced settings", lang:"Language", ft:"Background", hab:"Skin (AI Theme)", f:"BG", b:"Border", nb:"Count", sl:"Lore", sh:"Shiny", il:"Icon L", ir:"Icon R", dos:"Forge card back", del:"Clear gallery", ep:"Export PNG (A4)", pdf:"Export PDF (A4)", gen:"Forge cards", genLoad:"Forging…", pre:"Live preview", pl:"Your generated cards will appear here", cr:"The structure and code logic are the property of the author.", theme:"Art theme", res:"Export resolution", secType:"Typography", secTheme:"Theme & appearance", secDisplay:"Card display", secStats:"Stats", secExport:"Export & quality", galTitle:"Your collection", toastCopied:"Prompt copied to clipboard", toastNeedName:"Give this profile a name", toastSaved:"Profile saved", toastDeleted:"Profile deleted", toastNeedSelect:"Select a profile to delete", toastEmpty:"The gallery is empty", toastUsePdf:"For perfect front/back alignment, use “Export PDF” instead", profPh:"Load a profile…", confirmClear:"Clear the entire gallery? This action can't be undone.", toastError:"Generation failed. Check the AI connection." },
+    pt: { s:"FORJE CARTAS LENDÁRIAS", n:"NOME", l:"LORE (História)", e:"EFEITO (Capacidade)", p:"PROMPT (IA)", c:"Copiar prompt", prof:"Perfis", adv:"Definições avançadas", lang:"Idioma", ft:"Fundo", hab:"Skin (Tema IA)", f:"Fundo", b:"Borda", nb:"Número", sl:"Lore", sh:"Shiny", il:"Ícone E", ir:"Ícone D", dos:"Forjar verso da carta", del:"Limpar galeria", ep:"Exportar PNG (A4)", pdf:"Exportar PDF (A4)", gen:"Forjar cartas", genLoad:"A forjar…", pre:"Pré-visualização", pl:"As suas cartas geradas aparecerão aqui", cr:"A estrutura e a lógica do código são propriedade do autor.", theme:"Tema artístico", res:"Resolução de exportação", secType:"Tipografia", secTheme:"Tema & aparência", secDisplay:"Exibição da carta", secStats:"Estatísticas", secExport:"Exportação & qualidade", galTitle:"A sua coleção", toastCopied:"Prompt copiado para a área de transferência", toastNeedName:"Dê um nome a este perfil", toastSaved:"Perfil guardado", toastDeleted:"Perfil eliminado", toastNeedSelect:"Selecione um perfil para eliminar", toastEmpty:"A galeria está vazia", toastUsePdf:"Para um alinhamento frente/verso perfeito, use “Exportar PDF”", profPh:"Carregar um perfil…", confirmClear:"Limpar toda a galeria? Esta ação não pode ser desfeita.", toastError:"A geração falhou. Verifique a ligação à IA." }
   };
 
   function curLang() { return document.getElementById("langSelect").value || "fr"; }
@@ -452,16 +443,13 @@
     return String(result);
   }
 
-  // ===== Génération d'images via l'API Pollinations (remplace le plugin Perchance "text-to-image") =====
+  // ===== Génération d'images via l'API Pollinations =====
   const POLLINATIONS_BASE = "https://image.pollinations.ai/prompt/";
   const POLLINATIONS_MODEL = "flux";
   const POLLINATIONS_WIDTH = 1024;
   const POLLINATIONS_HEIGHT = 1434;
   const POLLINATIONS_TIMEOUT_MS = 90000;
 
-  // Le plugin Perchance acceptait un seed écrit en toutes lettres dans le prompt ("..., seed 12345").
-  // On l'extrait ici pour piloter le vrai paramètre &seed= de Pollinations (reproductibilité réelle),
-  // tout en retirant ces mots du prompt visuel pour ne pas polluer l'image générée.
   function parseSeedFromPrompt(prompt) {
     const match = prompt.match(/,\s*seed\s+(-?\d+)\s*$/i);
     if (match) {
@@ -477,8 +465,6 @@
     return `${POLLINATIONS_BASE}${encoded}?width=${POLLINATIONS_WIDTH}&height=${POLLINATIONS_HEIGHT}&seed=${finalSeed}&model=${POLLINATIONS_MODEL}&nologo=true&private=true`;
   }
 
-  // Précharge l'image en mémoire AVANT de la renvoyer : l'icône "image cassée" n'apparaît
-  // jamais côté UI, car on n'assigne jamais un src qui n'est pas encore prêt.
   function preloadImage(url) {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -496,8 +482,6 @@
     ]);
   }
 
-  // Remplace le plugin Perchance "text-to-image". Conserve la même signature (prompt -> résultat)
-  // et le même type de retour ({ image: { src } }) que celui géré par extractImageUrl().
   async function imageGenerator(prompt) {
     const url = buildPollinationsUrl(prompt);
     await withTimeout(preloadImage(url), POLLINATIONS_TIMEOUT_MS);
@@ -521,7 +505,7 @@
     set("lFondType", d[l].ft); set("btnHabillageText", d[l].hab);
     const fond = document.getElementById("lFond"); if (fond) fond.childNodes[0].textContent = d[l].f + " ";
     const bord = document.getElementById("lBordure"); if (bord) bord.childNodes[0].textContent = d[l].b + " ";
-    set("lNombre", d[l].nb); set("lShowLore", d[l].sl); set("lShiny", d[l].sh); set("lGlossy", d[l].gl);
+    set("lNombre", d[l].nb); set("lShowLore", d[l].sl); set("lShiny", d[l].sh);
     set("lIconL", d[l].il); set("lIconR", d[l].ir); set("btnDosText", d[l].dos); set("btnEffacerText", d[l].del);
     set("btnExpPNGText", d[l].ep); set("btnExpPDFText", d[l].pdf); set("genBtnText", d[l].gen); set("lPreview", d[l].pre);
     set("lPlace", d[l].pl); set("lCredit", d[l].cr); set("lTheme", d[l].theme); set("lRes", d[l].res);
@@ -550,7 +534,7 @@
     let l = curLang();
     let name = document.getElementById('profName').value;
     if (!name) { showToast(d[l].toastNeedName); return; }
-    let profile = { theme: document.getElementById('themeSelect').value, bgType: document.getElementById('bgType').value, bgCol: document.getElementById('bgCol').value, brdCol: document.getElementById('brdCol').value, showLore: document.getElementById('showLore').checked, isShiny: document.getElementById('isShiny').checked, isGlossy: document.getElementById('isGlossy').checked, showL: document.getElementById('showL').checked, showR: document.getElementById('showR').checked, valL: document.getElementById('valL').value, colL: document.getElementById('colL').value, valR: document.getElementById('valR').value, colR: document.getElementById('colR').value, font: document.getElementById('fontSelect').value, bold: document.getElementById('boldText').checked, italic: document.getElementById('italicText').checked };
+    let profile = { theme: document.getElementById('themeSelect').value, bgType: document.getElementById('bgType').value, bgCol: document.getElementById('bgCol').value, brdCol: document.getElementById('brdCol').value, showLore: document.getElementById('showLore').checked, isShiny: document.getElementById('isShiny').checked, showL: document.getElementById('showL').checked, showR: document.getElementById('showR').checked, valL: document.getElementById('valL').value, colL: document.getElementById('colL').value, valR: document.getElementById('valR').value, colR: document.getElementById('colR').value, font: document.getElementById('fontSelect').value, bold: document.getElementById('boldText').checked, italic: document.getElementById('italicText').checked };
     localStorage.setItem('prof_' + name, JSON.stringify(profile));
     updateProfileList();
     document.getElementById('profName').value = '';
@@ -562,10 +546,10 @@
     if (!name) { showToast(d[l].toastNeedSelect); return; }
     if (confirm("Supprimer le profil '" + name + "' ?")) { localStorage.removeItem('prof_' + name); updateProfileList(); updateApercu(); showToast(d[l].toastDeleted); }
   }
-  function loadProfile() { let name = document.getElementById('profSelect').value; if(!name) return; let p = JSON.parse(localStorage.getItem('prof_' + name)); document.getElementById('themeSelect').value = p.theme; document.getElementById('bgType').value = p.bgType; document.getElementById('bgCol').value = p.bgCol; document.getElementById('brdCol').value = p.brdCol; document.getElementById('showLore').checked = p.showLore; document.getElementById('isShiny').checked = p.isShiny; document.getElementById('isGlossy').checked = p.isGlossy; document.getElementById('showL').checked = p.showL; document.getElementById('showR').checked = p.showR; document.getElementById('valL').value = p.valL; document.getElementById('colL').value = p.colL; document.getElementById('valR').value = p.valR; document.getElementById('colR').value = p.colR; document.getElementById('fontSelect').value = p.font; document.getElementById('boldText').checked = p.bold; document.getElementById('italicText').checked = p.italic; updateApercu(); }
+  function loadProfile() { let name = document.getElementById('profSelect').value; if(!name) return; let p = JSON.parse(localStorage.getItem('prof_' + name)); document.getElementById('themeSelect').value = p.theme; document.getElementById('bgType').value = p.bgType; document.getElementById('bgCol').value = p.bgCol; document.getElementById('brdCol').value = p.brdCol; document.getElementById('showLore').checked = p.showLore; document.getElementById('isShiny').checked = p.isShiny; document.getElementById('showL').checked = p.showL; document.getElementById('showR').checked = p.showR; document.getElementById('valL').value = p.valL; document.getElementById('colL').value = p.colL; document.getElementById('valR').value = p.valR; document.getElementById('colR').value = p.colR; document.getElementById('fontSelect').value = p.font; document.getElementById('boldText').checked = p.bold; document.getElementById('italicText').checked = p.italic; updateApercu(); }
   function updateProfileList() { let sel = document.getElementById('profSelect'); let l = curLang(); let current = sel.value; sel.innerHTML = '<option value="">' + d[l].profPh + '</option>'; Object.keys(localStorage).forEach(k => { if(k.startsWith('prof_')) { let name = k.replace('prof_', ''); sel.innerHTML += `<option value="${name}">${name}</option>`; } }); if (current) sel.value = current; }
   function getPrompts() { let subject = document.getElementById("promptInput").value || "mystical character"; let p = subject + ", " + document.getElementById("themeSelect").value + ", high quality, professional illustration"; if(document.getElementById("isShiny").checked) p += ", holographic foil, rainbow shimmer"; let seed = document.getElementById("seedInput").value; if(seed) p += ", seed " + seed; return p; }
-  function updateApercu() { const c = document.getElementById('carte'); const imgF = document.getElementById('imgFrame'); const font = document.getElementById('fontSelect').value; const isBold = document.getElementById('boldText').checked; const isItalic = document.getElementById('italicText').checked; if(document.getElementById("bgType").value === "color") c.style.background = document.getElementById('bgCol').value; c.style.borderColor = document.getElementById('brdCol').value; c.className = 'card-render ' + (document.getElementById('showLore').checked ? '' : ' hide-lore'); imgF.className = 'img-frame ' + (document.getElementById('isGlossy').checked ? 'is-glossy' : ''); const texts = [document.getElementById('displayNom'), document.getElementById('displayLore'), document.getElementById('displayEffet')]; texts.forEach(el => { el.style.fontFamily = font; el.style.fontWeight = isBold ? '900' : 'normal'; el.style.fontStyle = isItalic ? 'italic' : 'normal'; }); document.getElementById('displayNom').innerText = document.getElementById('nomInput').value || 'NAME'; document.getElementById('displayLore').innerText = document.getElementById('loreInput').value || 'Lore...'; document.getElementById('displayEffet').innerText = document.getElementById('effetInput').value || 'Effect...'; c.querySelectorAll('.icon-shape').forEach(e => e.remove()); if(document.getElementById('showL').checked) { let el = document.createElement('div'); el.className = 'icon-shape heart tl'; el.style.background = document.getElementById('colL').value; el.innerText = document.getElementById('valL').value; c.appendChild(el); } if(document.getElementById('showR').checked) { let el = document.createElement('div'); el.className = 'icon-shape shield tr'; el.style.background = document.getElementById('colR').value; el.innerText = document.getElementById('valR').value; c.appendChild(el); } }
+  function updateApercu() { const c = document.getElementById('carte'); const imgF = document.getElementById('imgFrame'); const font = document.getElementById('fontSelect').value; const isBold = document.getElementById('boldText').checked; const isItalic = document.getElementById('italicText').checked; if(document.getElementById("bgType").value === "color") c.style.background = document.getElementById('bgCol').value; c.style.borderColor = document.getElementById('brdCol').value; c.className = 'card-render ' + (document.getElementById('showLore').checked ? '' : ' hide-lore'); imgF.className = 'img-frame'; const texts = [document.getElementById('displayNom'), document.getElementById('displayLore'), document.getElementById('displayEffet')]; texts.forEach(el => { el.style.fontFamily = font; el.style.fontWeight = isBold ? '900' : 'normal'; el.style.fontStyle = isItalic ? 'italic' : 'normal'; }); document.getElementById('displayNom').innerText = document.getElementById('nomInput').value || 'NAME'; document.getElementById('displayLore').innerText = document.getElementById('loreInput').value || 'Lore...'; document.getElementById('displayEffet').innerText = document.getElementById('effetInput').value || 'Effect...'; c.querySelectorAll('.icon-shape').forEach(e => e.remove()); if(document.getElementById('showL').checked) { let el = document.createElement('div'); el.className = 'icon-shape heart tl'; el.style.background = document.getElementById('colL').value; el.innerText = document.getElementById('valL').value; c.appendChild(el); } if(document.getElementById('showR').checked) { let el = document.createElement('div'); el.className = 'icon-shape shield tr'; el.style.background = document.getElementById('colR').value; el.innerText = document.getElementById('valR').value; c.appendChild(el); } }
   updateApercu();
   document.addEventListener("keydown", function(event) { if (event.key === "Enter" && document.activeElement.tagName === "INPUT") generer(); });
   async function genererFondIA() { const btn = document.getElementById('btnHabillage'); let theme = document.getElementById("themeSelect").value; let variations = themesData[theme] || ["abstract artistic background"]; let variationAleatoire = variations[Math.floor(Math.random() * variations.length)]; let prompt = `professional TCG background, themed ${theme}, featuring ${variationAleatoire}, clean and dark central area for text, elegant border, high-end digital art, not cluttered, 8k, game art`; btn.classList.add('loading'); btn.disabled = true; try { let url = extractImageUrl(await imageGenerator(prompt)); document.getElementById('carte').style.background = `url(${url}) center/cover`; } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } finally { btn.classList.remove('loading'); btn.disabled = false; } }
@@ -608,8 +592,54 @@
   function save() { localStorage.setItem('cards', document.getElementById('galerie').innerHTML); }
   function clearGallery() { if (!confirm(d[curLang()].confirmClear)) return; document.getElementById('galerie').innerHTML = `<div id="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2" transform="rotate(-6 3 5)" opacity="0.4"/><rect x="8" y="3" width="13" height="16" rx="2"/></svg><p id="lPlace">${d[curLang()].pl}</p></div>`; localStorage.removeItem('cards'); }
   window.onload = () => { if(localStorage.getItem('cards')) { document.getElementById('galerie').innerHTML = localStorage.getItem('cards'); document.getElementById('placeholder').style.display = 'none'; } updateProfileList(); initDragAndDrop(); };
-  function exportCard(btn) { const wrapper = btn.closest('.card-wrapper'); const cardEl = wrapper.querySelector('.card-render'); html2canvas(cardEl, { scale: 2, backgroundColor: null, useCORS: true, allowTaint: false, onclone: (clonedDoc) => { fitImagesCover(clonedDoc); } }).then(canvas => { const finalCanvas = document.createElement('canvas'); finalCanvas.width = 750; finalCanvas.height = 1050; const ctx = finalCanvas.getContext('2d'); ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 750, 1050); const a = document.createElement('a'); a.download = 'Carte_Format_Poker.png'; a.href = finalCanvas.toDataURL("image/png"); a.click(); }); }
-  async function exporterPDF() { const l = curLang(); const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'mm', 'a4'); const cartes = document.querySelectorAll('#galerie .card-render'); if (cartes.length === 0) { showToast(d[l].toastEmpty); return; } const startX = (210 - (gridParams.cardW * 3 + gridParams.gapX * 2)) / 2, startY = (297 - (gridParams.cardH * 3 + gridParams.gapY * 2)) / 2; let x = startX, y = startY, countOnPage = 0; for (let i = 0; i < cartes.length; i++) { if (countOnPage === 9) { doc.addPage(); x = startX; y = startY; countOnPage = 0; } const canvas = await html2canvas(cartes[i], { scale: 3, useCORS: true, onclone: (clonedDoc) => { fitImagesCover(clonedDoc); } }); doc.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', x, y, gridParams.cardW, gridParams.cardH); countOnPage++; x += (gridParams.cardW + gridParams.gapX); if (countOnPage % 3 === 0) { x = startX; y += (gridParams.cardH + gridParams.gapY); } } doc.save("Cartes_Standard_Poker.pdf"); }
+  
+  function exportCard(btn) { 
+    const wrapper = btn.closest('.card-wrapper'); 
+    const cardEl = wrapper.querySelector('.card-render'); 
+    html2canvas(cardEl, { 
+      scale: 2, 
+      backgroundColor: 'transparent', 
+      useCORS: true, 
+      allowTaint: false, 
+      onclone: (clonedDoc) => { 
+        fitImagesCover(clonedDoc);
+        clonedDoc.querySelectorAll('.card-render').forEach(el => el.style.boxShadow = 'none');
+      } 
+    }).then(canvas => { 
+      const finalCanvas = document.createElement('canvas'); 
+      finalCanvas.width = 750; finalCanvas.height = 1050; 
+      const ctx = finalCanvas.getContext('2d'); 
+      ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 750, 1050); 
+      const a = document.createElement('a'); a.download = 'Carte_Format_Poker.png'; a.href = finalCanvas.toDataURL("image/png"); a.click(); 
+    }); 
+  }
+
+  async function exporterPDF() { 
+    const l = curLang(); 
+    const { jsPDF } = window.jspdf; 
+    const doc = new jsPDF('p', 'mm', 'a4'); 
+    const cartes = document.querySelectorAll('#galerie .card-render'); 
+    if (cartes.length === 0) { showToast(d[l].toastEmpty); return; } 
+    const startX = (210 - (gridParams.cardW * 3 + gridParams.gapX * 2)) / 2, startY = (297 - (gridParams.cardH * 3 + gridParams.gapY * 2)) / 2; 
+    let x = startX, y = startY, countOnPage = 0; 
+    for (let i = 0; i < cartes.length; i++) { 
+      if (countOnPage === 9) { doc.addPage(); x = startX; y = startY; countOnPage = 0; } 
+      const canvas = await html2canvas(cartes[i], { 
+        scale: 3, 
+        backgroundColor: '#ffffff',
+        useCORS: true, 
+        onclone: (clonedDoc) => { 
+          fitImagesCover(clonedDoc);
+          clonedDoc.querySelectorAll('.card-render').forEach(el => el.style.boxShadow = 'none');
+        } 
+      }); 
+      doc.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', x, y, gridParams.cardW, gridParams.cardH); 
+      countOnPage++; x += (gridParams.cardW + gridParams.gapX); 
+      if (countOnPage % 3 === 0) { x = startX; y += (gridParams.cardH + gridParams.gapY); } 
+    } 
+    doc.save("Cartes_Standard_Poker.pdf"); 
+  }
+
   async function exporterPlanche() { showToast(d[curLang()].toastUsePdf); }
 </script>
 </body>
