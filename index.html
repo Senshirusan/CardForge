@@ -3,6 +3,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>CardForge AI | Ultimate Studio</title>
+  <link rel="icon" type="image/webp" href="https://user.uploads.dev/file/23cbf9229916d9a1833fd784a65ba1fd.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -56,6 +57,7 @@
   .loading svg { animation: spin 0.85s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ---------- Header ---------- */
   .app-shell { max-width: 1000px; width: 100%; margin: 0 auto; }
   .app-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
   .brand { display: flex; align-items: center; gap: 14px; }
@@ -69,11 +71,13 @@
   @keyframes seamFlow { to { background-position: 200% 0; } }
   @media (prefers-reduced-motion: reduce) { .forge-seam { animation: none; } .loading svg { animation: none; } }
 
+  /* ---------- Layout ---------- */
   .grid { display: grid; grid-template-columns: 1fr; max-width: 1000px; margin: auto; gap: 28px; align-items: start; width: 100%; flex: 1; }
   @media (min-width: 768px) { .grid { grid-template-columns: 360px 1fr; } }
   .sticky-preview { position: -webkit-sticky; position: sticky; top: 20px; }
   .panel { background: var(--panel); backdrop-filter: blur(20px) saturate(140%); padding: 26px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); }
 
+  /* ---------- Form elements ---------- */
   label { display: block; margin-top: 16px; margin-bottom: 6px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; color: var(--steel); }
   input, select, textarea {
     width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--off); padding: 12px 14px;
@@ -84,6 +88,7 @@
   textarea { resize: vertical; min-height: 54px; }
   select { cursor: pointer; }
 
+  /* ---------- Buttons ---------- */
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.84rem; font-weight: 700; padding: 11px 16px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; transition: filter .15s ease, transform .15s ease, background .15s ease; white-space: nowrap; }
   .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
   .btn-block { width: 100%; }
@@ -103,10 +108,16 @@
   .icon-btn.danger:hover { background: rgba(239,68,68,0.16); color: #f87171; border-color: rgba(239,68,68,0.32); }
   .icon-btn svg { width: 16px; height: 16px; }
 
+  /* ---------- Inline tools row ---------- */
+  .tool-row { display: flex; gap: 8px; margin-top: 8px; }
+  .tool-row input { flex: 1; }
+
+  /* ---------- Profiles ---------- */
   .profiles-box { margin-top: 18px; background: var(--panel-2); border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-md); }
   .profiles-box label { margin-top: 0; }
   .profiles-row { display: flex; gap: 8px; }
 
+  /* ---------- Advanced toggle ---------- */
   .adv-toggle { margin-top: 22px; padding: 13px 14px; border-radius: var(--radius-sm); background: var(--panel-2); border: 1px solid var(--border); cursor: pointer; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; justify-content: space-between; transition: background .15s ease; }
   .adv-toggle:hover { background: rgba(255,255,255,0.08); }
   .adv-toggle .left { display: flex; align-items: center; gap: 10px; }
@@ -133,13 +144,14 @@
   .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
   .stat-input-pair { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 10px; align-items: center; }
 
+  /* ---------- Header card-design ---------- */
   .card-render { width: 280px; height: 392px; border-radius: 10px; background: white; color: black; padding: 5px; border: 4px solid #cbd5e1; margin: auto; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; background-size: cover; background-position: center; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4), var(--shadow-md); }
   .img-frame {
     position: relative; width: 230px; height: 190px; border: 2px solid #cbd5e1; border-radius: 6px; margin-top: 54px; overflow: hidden; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     background-color: #eef1f6;
-    background-image: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-    background-size: cover; background-repeat: no-repeat; background-position: center;
+    background-image: linear-gradient(135deg, #f1f5f9, #e2e8f0), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='1.4'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E");
+    background-size: cover, 56px; background-repeat: no-repeat, no-repeat; background-position: center, center;
   }
   .card-render img { width: 100%; height: 100%; object-fit: cover; display: none; }
   .icon-shape { position: absolute; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; z-index: 10; font-size: 0.8rem; box-shadow: 0 3px 8px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.8); }
@@ -158,6 +170,7 @@
   .hide-lore #displayEffet { flex-grow: 0; height: 112px; margin-top: 14px; border-radius: 8px; border-top: 1px solid #cbd5e1; }
   @media (prefers-reduced-motion: reduce) { .is-glossy .shiny-overlay { animation: none; opacity: 0.5; } }
 
+  /* ---------- Gallery ---------- */
   .gallery-heading { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 16px; color: var(--steel); }
   .gallery-heading svg { width: 16px; height: 16px; color: var(--ember); }
   .gallery-heading span { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -172,6 +185,7 @@
   #placeholder svg { width: 38px; height: 38px; color: var(--steel-dim); opacity: 0.6; }
   #placeholder p { margin: 0; font-style: normal; font-size: 0.9rem; }
 
+  /* ---------- Toasts ---------- */
   #toastContainer { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 99999; pointer-events: none; align-items: center; }
   .toast { background: #1c1c22; border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.83rem; font-weight: 600; box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 8px; animation: toastIn .25s ease, toastOut .25s ease 2.5s forwards; }
   .toast svg { width: 15px; height: 15px; color: var(--success); flex-shrink: 0; }
@@ -255,6 +269,7 @@
     </div>
 
     <div id="adv">
+
       <div class="adv-section">
         <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg><span id="secType">Typographie</span></h4>
         <div class="switch-row"><span id="lLang">Langue</span> <select id="langSelect" onchange="traduire()" style="width:90px;"><option value="fr">FR</option><option value="en">EN</option><option value="pt">PT</option></select></div>
@@ -307,6 +322,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
           <span id="btnHabillageText">Habillage (Thème IA)</span>
         </button>
+        <p style="font-size:0.72rem; color:var(--steel-dim); margin:8px 0 0;">Le thème choisi influence à la fois l'illustration générée et l'habillage de fond, pour rester cohérent.</p>
         <div class="field-pair">
             <label class="color-field" id="lFond">Fond <input type="color" id="bgCol" value="#ffffff" oninput="updateApercu()"></label>
             <label class="color-field" id="lBordure">Bordure <input type="color" id="brdCol" value="#cbd5e1" oninput="updateApercu()"></label>
@@ -350,6 +366,7 @@
           <span id="btnExpPDFText">Exporter en PDF (A4)</span>
         </button>
       </div>
+
     </div>
 
     <button id="genBtn" class="btn btn-primary btn-block btn-lg" style="margin-top:22px;" onclick="generer()">
@@ -388,14 +405,6 @@
 </footer>
 
 <script>
-  // --- Intégration API Pollinations ---
-  async function imageGenerator(prompt) {
-    const seed = Math.floor(Math.random() * 10000000);
-    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=${seed}&nologo=true&width=1024&height=1024`;
-    return url;
-  }
-  // ------------------------------------
-
   const gridParams = { cardW: 63.5, cardH: 88.9, gapX: 2, gapY: 2 };
   const ICONS = {
     zoom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
@@ -430,6 +439,69 @@
       img.style.height = h + 'px';
       img.style.maxWidth = 'none';
     });
+  }
+
+  function extractImageUrl(result) {
+    if (typeof result === 'string') return result;
+    if (result && typeof result === 'object') {
+      if (typeof result.image === 'string') return result.image;
+      if (result.image && typeof result.image.src === 'string') return result.image.src;
+      if (typeof result.url === 'string') return result.url;
+      if (typeof result.src === 'string') return result.src;
+    }
+    return String(result);
+  }
+
+  // ===== Génération d'images via l'API Pollinations (remplace le plugin Perchance "text-to-image") =====
+  const POLLINATIONS_BASE = "https://image.pollinations.ai/prompt/";
+  const POLLINATIONS_MODEL = "flux";
+  const POLLINATIONS_WIDTH = 1024;
+  const POLLINATIONS_HEIGHT = 1434;
+  const POLLINATIONS_TIMEOUT_MS = 90000;
+
+  // Le plugin Perchance acceptait un seed écrit en toutes lettres dans le prompt ("..., seed 12345").
+  // On l'extrait ici pour piloter le vrai paramètre &seed= de Pollinations (reproductibilité réelle),
+  // tout en retirant ces mots du prompt visuel pour ne pas polluer l'image générée.
+  function parseSeedFromPrompt(prompt) {
+    const match = prompt.match(/,\s*seed\s+(-?\d+)\s*$/i);
+    if (match) {
+      return { cleanPrompt: prompt.slice(0, match.index).trim(), seed: match[1] };
+    }
+    return { cleanPrompt: prompt, seed: null };
+  }
+
+  function buildPollinationsUrl(prompt) {
+    const { cleanPrompt, seed } = parseSeedFromPrompt(prompt);
+    const finalSeed = (seed !== null && seed !== "") ? seed : Math.floor(Math.random() * 1000000000);
+    const encoded = encodeURIComponent(cleanPrompt);
+    return `${POLLINATIONS_BASE}${encoded}?width=${POLLINATIONS_WIDTH}&height=${POLLINATIONS_HEIGHT}&seed=${finalSeed}&model=${POLLINATIONS_MODEL}&nologo=true&private=true`;
+  }
+
+  // Précharge l'image en mémoire AVANT de la renvoyer : l'icône "image cassée" n'apparaît
+  // jamais côté UI, car on n'assigne jamais un src qui n'est pas encore prêt.
+  function preloadImage(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(url);
+      img.onerror = () => reject(new Error("Échec du chargement de l'image générée (Pollinations)."));
+      img.src = url;
+    });
+  }
+
+  function withTimeout(promise, ms) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Délai de génération dépassé.")), ms))
+    ]);
+  }
+
+  // Remplace le plugin Perchance "text-to-image". Conserve la même signature (prompt -> résultat)
+  // et le même type de retour ({ image: { src } }) que celui géré par extractImageUrl().
+  async function imageGenerator(prompt) {
+    const url = buildPollinationsUrl(prompt);
+    await withTimeout(preloadImage(url), POLLINATIONS_TIMEOUT_MS);
+    return { image: { src: url } };
   }
 
   function showToast(msg, type) {
@@ -470,12 +542,7 @@
     showToast(d[curLang()].toastCopied);
   }
 
-  function initDragAndDrop() { 
-      const galerie = document.getElementById('galerie'); 
-      galerie.addEventListener('dragstart', (e) => { if(e.target.tagName === 'BUTTON') { e.preventDefault(); return; } const item = e.target.closest('.card-wrapper'); if(item) item.classList.add('dragging'); }); 
-      galerie.addEventListener('dragend', (e) => { const item = e.target.closest('.card-wrapper'); if(item) item.classList.remove('dragging'); save(); }); 
-      galerie.addEventListener('dragover', (e) => { e.preventDefault(); const afterElement = getDragAfterElement(galerie, e.clientY); const current = document.querySelector('.dragging'); if (current) { if (afterElement == null) galerie.appendChild(current); else galerie.insertBefore(current, afterElement); } }); 
-  }
+  function initDragAndDrop() { const galerie = document.getElementById('galerie'); galerie.addEventListener('dragstart', (e) => { if(e.target.tagName === 'BUTTON') { e.preventDefault(); return; } const item = e.target.closest('.card-wrapper'); if(item) item.classList.add('dragging'); }); galerie.addEventListener('dragend', (e) => { const item = e.target.closest('.card-wrapper'); if(item) item.classList.remove('dragging'); save(); }); galerie.addEventListener('dragover', (e) => { e.preventDefault(); const afterElement = getDragAfterElement(galerie, e.clientY); const current = document.querySelector('.dragging'); if (current) { if (afterElement == null) galerie.appendChild(current); else galerie.insertBefore(current, afterElement); } }); }
   function getDragAfterElement(container, y) { const draggableElements = [...container.querySelectorAll('.card-wrapper:not(.dragging)')]; return draggableElements.reduce((closest, child) => { const box = child.getBoundingClientRect(); const offset = y - box.top - box.height / 2; if (offset < 0 && offset > closest.offset) return { offset: offset, element: child }; else return closest; }, { offset: Number.NEGATIVE_INFINITY }).element; }
   const themesData = { "Heroic Fantasy": ["ancient carved stone", "mystical runes", "glowing ethereal mist"], "Cyberpunk": ["neon circuit board", "gritty chrome textures", "holographic data streams"], "Anime": ["soft watercolor sky", "dynamic action speed lines", "magical sparkle particles"], "Oil Painting": ["canvas fabric texture", "thick impasto brushstrokes", "classical art frame"], "Steampunk": ["brass clockwork gears", "aged parchment paper", "copper piping details"], "Dark Horror": ["cracked obsidian stone", "dripping blood ink", "eerie shadowy fog"], "Pixel Art": ["8-bit brick patterns", "classic console dither textures", "vibrant retro screen grid"], "Watercolor": ["bleeding pigment stains", "wet paper texture", "soft pastel gradients"], "Sci-Fi": ["brushed metallic plating", "starlight galaxy nebula", "futuristic carbon fiber"], "Vector Art": ["clean geometric shapes", "flat minimalist flat shading", "bold contrast graphics"], "Baroque Art": ["gilded gold filigree", "velvet fabric background", "ornate royal ceiling fresco"], "Vintage Comic": ["ben-day dot pattern", "distressed paper texture", "bold ink outlines"], "Egyptian Mythology": ["golden hieroglyphic carvings", "sun-bleached sandstone walls", "glowing ankh symbols"], "Norse Mythology": ["weathered rune-carved stone", "frost-covered iron chains", "raven feather motifs"], "Gothic Cathedral": ["carved stone gargoyles", "candlelit stained glass", "weathered cathedral archways"], "Atlantis": ["glowing coral formations", "sunken stone ruins", "bioluminescent underwater haze"], "Space Opera": ["distant nebula starfield", "sleek chrome starship hull", "glowing energy shield"], "Post-Apocalyptic": ["rusted scrap metal plating", "cracked wasteland terrain", "toxic haze atmosphere"], "Synthwave": ["neon grid horizon", "retro sunset gradient", "glowing chrome reflections"], "Ink Wash": ["flowing sumi-e brushstrokes", "textured rice paper", "minimalist ink gradients"], "Art Nouveau": ["flowing organic linework", "stained glass floral patterns", "elegant gold filigree curves"], "Art Deco": ["geometric gold linework", "polished black marble", "radiant sunburst patterns"], "Western Desert": ["weathered wooden planks", "dusty canyon rock formations", "sun-cracked desert earth"], "Tropical Jungle": ["dense vine-covered ruins", "lush emerald foliage", "humid jungle mist"], "Medieval Tapestry": ["woven heraldic thread texture", "aged embroidered fabric", "faded royal banner patterns"], "Crystal & Gem": ["faceted crystal formations", "prismatic light refraction", "geode mineral textures"] };
 
@@ -501,7 +568,7 @@
   function updateApercu() { const c = document.getElementById('carte'); const imgF = document.getElementById('imgFrame'); const font = document.getElementById('fontSelect').value; const isBold = document.getElementById('boldText').checked; const isItalic = document.getElementById('italicText').checked; if(document.getElementById("bgType").value === "color") c.style.background = document.getElementById('bgCol').value; c.style.borderColor = document.getElementById('brdCol').value; c.className = 'card-render ' + (document.getElementById('showLore').checked ? '' : ' hide-lore'); imgF.className = 'img-frame ' + (document.getElementById('isGlossy').checked ? 'is-glossy' : ''); const texts = [document.getElementById('displayNom'), document.getElementById('displayLore'), document.getElementById('displayEffet')]; texts.forEach(el => { el.style.fontFamily = font; el.style.fontWeight = isBold ? '900' : 'normal'; el.style.fontStyle = isItalic ? 'italic' : 'normal'; }); document.getElementById('displayNom').innerText = document.getElementById('nomInput').value || 'NAME'; document.getElementById('displayLore').innerText = document.getElementById('loreInput').value || 'Lore...'; document.getElementById('displayEffet').innerText = document.getElementById('effetInput').value || 'Effect...'; c.querySelectorAll('.icon-shape').forEach(e => e.remove()); if(document.getElementById('showL').checked) { let el = document.createElement('div'); el.className = 'icon-shape heart tl'; el.style.background = document.getElementById('colL').value; el.innerText = document.getElementById('valL').value; c.appendChild(el); } if(document.getElementById('showR').checked) { let el = document.createElement('div'); el.className = 'icon-shape shield tr'; el.style.background = document.getElementById('colR').value; el.innerText = document.getElementById('valR').value; c.appendChild(el); } }
   updateApercu();
   document.addEventListener("keydown", function(event) { if (event.key === "Enter" && document.activeElement.tagName === "INPUT") generer(); });
-  async function genererFondIA() { let theme = document.getElementById("themeSelect").value; let variations = themesData[theme] || ["abstract artistic background"]; let variationAleatoire = variations[Math.floor(Math.random() * variations.length)]; let prompt = `professional TCG background, themed ${theme}, featuring ${variationAleatoire}, clean and dark central area for text, elegant border, high-end digital art, not cluttered, 8k, game art`; try { let url = await imageGenerator(prompt); document.getElementById('carte').style.background = `url(${url}) center/cover`; } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } }
+  async function genererFondIA() { const btn = document.getElementById('btnHabillage'); let theme = document.getElementById("themeSelect").value; let variations = themesData[theme] || ["abstract artistic background"]; let variationAleatoire = variations[Math.floor(Math.random() * variations.length)]; let prompt = `professional TCG background, themed ${theme}, featuring ${variationAleatoire}, clean and dark central area for text, elegant border, high-end digital art, not cluttered, 8k, game art`; btn.classList.add('loading'); btn.disabled = true; try { let url = extractImageUrl(await imageGenerator(prompt)); document.getElementById('carte').style.background = `url(${url}) center/cover`; } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } finally { btn.classList.remove('loading'); btn.disabled = false; } }
   function agrandirCarte(cardEl) { let clone = cardEl.cloneNode(true); clone.style.margin = "0"; clone.style.width = "350px"; clone.style.height = "490px"; clone.style.cursor = "zoom-out"; clone.style.transform = "scale(1.2)"; let m = document.createElement('div'); m.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:flex; align-items:center; justify-content:center; z-index:9999;"; m.onclick = () => m.remove(); m.appendChild(clone); document.body.appendChild(m); }
   function dupliquerCard(btn) { const originalWrapper = btn.closest('.card-wrapper'); const clone = originalWrapper.cloneNode(true); document.getElementById('galerie').appendChild(clone); save(); }
 
@@ -520,21 +587,13 @@
     }
     save();
   }
-  async function createCardElement() { 
-    let seedValue = document.getElementById("seedInput").value || "Aléatoire"; 
-    let url = await imageGenerator(getPrompts()); 
-    let div = document.createElement('div'); div.className = 'card-wrapper'; div.setAttribute('draggable', 'true'); 
-    div.innerHTML = document.getElementById('carte').outerHTML + `<div class="seed-chip">Seed: ${seedValue} <button class="seed-copy" onclick="navigator.clipboard.writeText('${seedValue}')" title="Copier Seed">🌱</button></div>` + `<div class="controls"><button class="icon-btn" title="Zoom" onclick="agrandirCarte(this.parentElement.parentElement.querySelector('.card-render'))">${ICONS.zoom}</button><button class="icon-btn" title="Reroll" onclick="reroll(this)">${ICONS.reroll}</button><button class="icon-btn" title="Exporter" onclick="exportCard(this)">${ICONS.download}</button><button class="icon-btn danger" title="Supprimer" onclick="this.parentElement.parentElement.remove(); save();">${ICONS.trash}</button></div>`; 
-    let imgEl = div.querySelector('img'); imgEl.crossOrigin = "anonymous"; imgEl.src = url; imgEl.style.display = 'block'; 
-    return div; 
-  }
+  async function createCardElement() { let seedValue = document.getElementById("seedInput").value || "Aléatoire"; let url = extractImageUrl(await imageGenerator(getPrompts())); let div = document.createElement('div'); div.className = 'card-wrapper'; div.setAttribute('draggable', 'true'); div.innerHTML = document.getElementById('carte').outerHTML + `<div class="seed-chip">Seed: ${seedValue} <button class="seed-copy" onclick="navigator.clipboard.writeText('${seedValue}')" title="Copier Seed">🌱</button></div>` + `<div class="controls"><button class="icon-btn" title="Zoom" onclick="agrandirCarte(this.parentElement.parentElement.querySelector('.card-render'))">${ICONS.zoom}</button><button class="icon-btn" title="Reroll" onclick="reroll(this)">${ICONS.reroll}</button><button class="icon-btn" title="Exporter" onclick="exportCard(this)">${ICONS.download}</button><button class="icon-btn danger" title="Supprimer" onclick="this.parentElement.parentElement.remove(); save();">${ICONS.trash}</button></div>`; let imgEl = div.querySelector('img'); imgEl.crossOrigin = "anonymous"; imgEl.src = url; imgEl.style.display = 'block'; return div; }
   async function genererDos() {
     const btn = document.getElementById('btnDos');
     btn.classList.add('loading'); btn.disabled = true;
     try {
-      let url = await imageGenerator("ornate symmetrical fantasy card back, no text, " + document.getElementById("themeSelect").value);
-      let div = document.createElement('div'); div.className = 'card-wrapper'; div.setAttribute('draggable', 'true'); 
-      div.innerHTML = `<div class="card-render" style="border:none; padding:0; border-radius:16px; overflow:hidden; background:white;"><img crossorigin="anonymous" src="${url}" style="display:block; width:100%; height:100%; object-fit:cover;"></div><div class="controls"><button class="icon-btn" title="Zoom" onclick="agrandirCarte(this.parentElement.parentElement.querySelector('.card-render'))">${ICONS.zoom}</button><button class="icon-btn" title="Reroll" onclick="rerollDos(this)">${ICONS.reroll}</button><button class="icon-btn" title="Dupliquer" onclick="dupliquerCard(this)">${ICONS.copy}</button><button class="icon-btn" title="Exporter" onclick="exportCard(this)">${ICONS.download}</button><button class="icon-btn danger" title="Supprimer" onclick="this.parentElement.parentElement.remove(); save();">${ICONS.trash}</button></div>`;
+      let url = extractImageUrl(await imageGenerator("ornate symmetrical fantasy card back, no text, " + document.getElementById("themeSelect").value));
+      let div = document.createElement('div'); div.className = 'card-wrapper'; div.setAttribute('draggable', 'true'); div.innerHTML = `<div class="card-render" style="border:none; padding:0; border-radius:16px; overflow:hidden; background:white;"><img crossorigin="anonymous" src="${url}" style="display:block; width:100%; height:100%; object-fit:cover;"></div><div class="controls"><button class="icon-btn" title="Zoom" onclick="agrandirCarte(this.parentElement.parentElement.querySelector('.card-render'))">${ICONS.zoom}</button><button class="icon-btn" title="Reroll" onclick="rerollDos(this)">${ICONS.reroll}</button><button class="icon-btn" title="Dupliquer" onclick="dupliquerCard(this)">${ICONS.copy}</button><button class="icon-btn" title="Exporter" onclick="exportCard(this)">${ICONS.download}</button><button class="icon-btn danger" title="Supprimer" onclick="this.parentElement.parentElement.remove(); save();">${ICONS.trash}</button></div>`;
       div.querySelector('img').style.display = 'block';
       document.getElementById('galerie').appendChild(div);
       save();
@@ -544,8 +603,8 @@
       btn.classList.remove('loading'); btn.disabled = false;
     }
   }
-  async function reroll(btn) { try { btn.parentElement.parentElement.querySelector('img').src = await imageGenerator(getPrompts()); save(); } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } }
-  async function rerollDos(btn) { try { let url = await imageGenerator("ornate symmetrical fantasy card back"); btn.parentElement.parentElement.querySelector('img').src = url; save(); } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } }
+  async function reroll(btn) { btn.classList.add('loading'); try { btn.parentElement.parentElement.querySelector('img').src = extractImageUrl(await imageGenerator(getPrompts())); save(); } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } finally { btn.classList.remove('loading'); } }
+  async function rerollDos(btn) { btn.classList.add('loading'); try { let url = extractImageUrl(await imageGenerator("ornate symmetrical fantasy card back")); btn.parentElement.parentElement.querySelector('img').src = url; save(); } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } finally { btn.classList.remove('loading'); } }
   function save() { localStorage.setItem('cards', document.getElementById('galerie').innerHTML); }
   function clearGallery() { if (!confirm(d[curLang()].confirmClear)) return; document.getElementById('galerie').innerHTML = `<div id="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2" transform="rotate(-6 3 5)" opacity="0.4"/><rect x="8" y="3" width="13" height="16" rx="2"/></svg><p id="lPlace">${d[curLang()].pl}</p></div>`; localStorage.removeItem('cards'); }
   window.onload = () => { if(localStorage.getItem('cards')) { document.getElementById('galerie').innerHTML = localStorage.getItem('cards'); document.getElementById('placeholder').style.display = 'none'; } updateProfileList(); initDragAndDrop(); };
