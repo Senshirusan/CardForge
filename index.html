@@ -1,0 +1,572 @@
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CardForge AI | Ultimate Studio</title>
+<link rel="icon" type="image/webp" href="https://user.uploads.dev/file/23cbf9229916d9a1833fd784a65ba1fd.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #08080c;
+    --panel: rgba(22, 22, 28, 0.72);
+    --panel-2: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.09);
+    --arcane: #6d5ef0;
+    --arcane-2: #8b7bf7;
+    --ember: #f5793a;
+    --ember-2: #fbbf24;
+    --text: #f5f5f7;
+    --steel: #9a9aa6;
+    --steel-dim: #6c6c78;
+    --off: #34343d;
+    --on: var(--arcane);
+    --danger: #ef4444;
+    --danger-soft: rgba(239,68,68,0.13);
+    --success: #22c55e;
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --shadow-lg: 0 24px 60px -20px rgba(0,0,0,0.55);
+    --shadow-md: 0 12px 28px -10px rgba(0,0,0,0.45);
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 18% -10%, rgba(109,94,240,0.22) 0%, transparent 45%),
+      radial-gradient(circle at 85% 0%, rgba(245,121,58,0.14) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    padding: 28px 20px 0;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  button { font-family: 'Inter', sans-serif; }
+  button:active { transform: scale(0.97); }
+  a { color: inherit; }
+  ::placeholder { color: var(--steel-dim); opacity: 1; }
+  :focus-visible { outline: 2px solid var(--arcane-2); outline-offset: 2px; }
+  .loading { opacity: 0.7; pointer-events: none; cursor: wait; }
+  .loading svg { animation: spin 0.85s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- Header ---------- */
+  .app-shell { max-width: 1000px; width: 100%; margin: 0 auto; }
+  .app-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark { width: 52px; height: 52px; flex-shrink: 0; border-radius: 16px; background: linear-gradient(135deg, var(--arcane), var(--ember)); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px -6px rgba(109,94,240,0.55); }
+  .site-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.65rem; font-weight: 700; margin: 0; letter-spacing: -0.02em; line-height: 1.1; }
+  .accent-word { background: linear-gradient(135deg, var(--arcane-2), var(--ember)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .eyebrow { font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); margin: 4px 0 0; }
+  .badge-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: var(--arcane-2); background: rgba(109,94,240,0.12); border: 1px solid rgba(109,94,240,0.3); padding: 7px 14px; border-radius: 100px; }
+  .badge-pill svg { width: 13px; height: 13px; }
+  .forge-seam { height: 2px; border-radius: 2px; margin: 0 0 36px; background: linear-gradient(90deg, transparent, var(--arcane), var(--ember), var(--arcane), transparent); background-size: 200% 100%; animation: seamFlow 9s linear infinite; opacity: 0.85; }
+  @keyframes seamFlow { to { background-position: 200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .forge-seam { animation: none; } .loading svg { animation: none; } }
+
+  /* ---------- Layout ---------- */
+  .grid { display: grid; grid-template-columns: 1fr; max-width: 1000px; margin: auto; gap: 28px; align-items: start; width: 100%; flex: 1; }
+  @media (min-width: 768px) { .grid { grid-template-columns: 360px 1fr; } }
+  .sticky-preview { position: -webkit-sticky; position: sticky; top: 20px; }
+  .panel { background: var(--panel); backdrop-filter: blur(20px) saturate(140%); padding: 26px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); }
+
+  /* ---------- Form elements ---------- */
+  label { display: block; margin-top: 16px; margin-bottom: 6px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; color: var(--steel); }
+  input, select, textarea {
+    width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--off); padding: 12px 14px;
+    border-radius: var(--radius-sm); color: var(--text); margin-top: 0; font-size: 0.9rem;
+    font-family: 'Inter', sans-serif; transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--arcane); box-shadow: 0 0 0 3px rgba(109,94,240,0.18); outline: none; }
+  textarea { resize: vertical; min-height: 54px; }
+  select { cursor: pointer; }
+
+  /* ---------- Buttons ---------- */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.84rem; font-weight: 700; padding: 11px 16px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; transition: filter .15s ease, transform .15s ease, background .15s ease; white-space: nowrap; }
+  .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .btn-block { width: 100%; }
+  .btn-lg { padding: 13px 18px; font-size: 0.88rem; }
+  .btn-primary { background: linear-gradient(135deg, var(--arcane), var(--ember)); color: #fff; box-shadow: 0 10px 22px -6px rgba(109,94,240,0.55); }
+  .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .btn-secondary { background: var(--panel-2); color: var(--text); border-color: var(--border); }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+  .btn-success { background: rgba(34,197,94,0.14); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+  .btn-success:hover { background: rgba(34,197,94,0.22); }
+  .btn-danger { background: var(--danger-soft); color: #f87171; border-color: rgba(239,68,68,0.28); }
+  .btn-danger:hover { background: rgba(239,68,68,0.22); }
+  .btn-amber { background: rgba(245,158,11,0.14); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
+  .btn-amber:hover { background: rgba(245,158,11,0.22); }
+  .icon-btn { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--steel); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s ease; padding: 0; }
+  .icon-btn:hover { background: rgba(255,255,255,0.13); color: var(--text); transform: translateY(-1px); }
+  .icon-btn.danger:hover { background: rgba(239,68,68,0.16); color: #f87171; border-color: rgba(239,68,68,0.32); }
+  .icon-btn svg { width: 16px; height: 16px; }
+
+  /* ---------- Inline tools row ---------- */
+  .tool-row { display: flex; gap: 8px; margin-top: 8px; }
+  .tool-row input { flex: 1; }
+
+  /* ---------- Profiles ---------- */
+  .profiles-box { margin-top: 18px; background: var(--panel-2); border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-md); }
+  .profiles-box label { margin-top: 0; }
+  .profiles-row { display: flex; gap: 8px; }
+
+  /* ---------- Advanced toggle ---------- */
+  .adv-toggle { margin-top: 22px; padding: 13px 14px; border-radius: var(--radius-sm); background: var(--panel-2); border: 1px solid var(--border); cursor: pointer; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; justify-content: space-between; transition: background .15s ease; }
+  .adv-toggle:hover { background: rgba(255,255,255,0.08); }
+  .adv-toggle .left { display: flex; align-items: center; gap: 10px; }
+  .adv-toggle svg.gear { width: 17px; height: 17px; color: var(--arcane-2); }
+  .adv-toggle svg.chev { width: 15px; height: 15px; color: var(--steel); transition: transform .2s ease; }
+  .adv-toggle.open svg.chev { transform: rotate(180deg); }
+  #adv { display: none; }
+
+  .adv-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .adv-section:first-child { margin-top: 18px; padding-top: 0; border-top: none; }
+  .adv-section h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+  .adv-section h4 svg { width: 14px; height: 14px; color: var(--ember); flex-shrink: 0; }
+
+  .switch-row { display: flex; align-items: center; justify-content: space-between; margin: 14px 0; font-size: 0.85rem; color: var(--text); }
+  .switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--off); transition: .25s; border-radius: 22px; }
+  .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .25s; border-radius: 50%; }
+  input:checked + .slider { background-color: var(--on); }
+  input:checked + .slider:before { transform: translateX(18px); }
+
+  .color-field { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--steel); margin-top: 0; }
+  .color-field input[type="color"] { width: 32px; height: 32px; padding: 2px; border-radius: 8px; cursor: pointer; flex-shrink: 0; }
+  .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .stat-input-pair { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 10px; align-items: center; }
+
+  /* ---------- Header card-design ---------- */
+  .card-render { width: 280px; height: 392px; border-radius: 10px; background: white; color: black; padding: 5px; border: 4px solid #cbd5e1; margin: auto; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; background-size: cover; background-position: center; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4), var(--shadow-md); }
+  .img-frame {
+    position: relative; width: 230px; height: 190px; border: 2px solid #cbd5e1; border-radius: 6px; margin-top: 54px; overflow: hidden; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background-color: #eef1f6;
+    background-image: linear-gradient(135deg, #f1f5f9, #e2e8f0), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='1.4'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E");
+    background-size: cover, 56px; background-repeat: no-repeat, no-repeat; background-position: center, center;
+  }
+  .card-render img { width: 100%; height: 100%; object-fit: cover; display: none; }
+  .icon-shape { position: absolute; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; z-index: 10; font-size: 0.8rem; box-shadow: 0 3px 8px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.8); }
+  .icon-shape.heart { border-radius: 50%; }
+  .icon-shape.shield { border-radius: 8px 8px 14px 14px; }
+  .tl { top: 10px; left: 10px; }
+  .tr { top: 10px; right: 10px; }
+  .text-box { background: rgba(255, 255, 255, 0.95); border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 0.82rem; line-height: 1.25; color: #18181b; text-align: center; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .name-box { position: absolute; top: 10px; width: 152px; height: 30px; font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; z-index: 5; background: rgba(255,255,255,0.92); border: 1px solid #cbd5e1; border-radius: 6px; }
+  .lore-box { width: 230px; height: 56px; margin-top: 14px; border-radius: 8px 8px 0 0; border-bottom: 1px dashed rgba(0,0,0,0.18); font-size: 0.74rem; font-weight: 400; color: #52525b; flex-shrink: 0; }
+  .effect-box { width: 230px; height: 56px; margin-top: 4px; border-top: none; border-radius: 0 0 8px 8px; font-weight: 600; flex-shrink: 0; padding: 4px; }
+  .shiny-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.6) 100%); pointer-events: none; opacity: 0; z-index: 20; border-radius: 6px; }
+  .is-glossy .shiny-overlay { opacity: 1; animation: shineAnim 3s infinite linear; }
+  @keyframes shineAnim { 0% { background-position: 200% 200%; } 100% { background-position: -200% -200%; } }
+  .hide-lore #displayLore { display: none; }
+  .hide-lore #displayEffet { flex-grow: 0; height: 112px; margin-top: 14px; border-radius: 8px; border-top: 1px solid #cbd5e1; }
+  @media (prefers-reduced-motion: reduce) { .is-glossy .shiny-overlay { animation: none; opacity: 0.5; } }
+
+  /* ---------- Gallery ---------- */
+  .gallery-heading { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 16px; color: var(--steel); }
+  .gallery-heading svg { width: 16px; height: 16px; color: var(--ember); }
+  .gallery-heading span { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  #galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); justify-items: center; gap: 26px; padding: 24px; max-width: 1000px; margin: 8px auto 50px; min-height: 200px; border: 1.5px dashed var(--border); border-radius: var(--radius-lg); width: 95%; }
+  .card-wrapper { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 18px; border: 1px solid var(--border); text-align: center; width: 320px; cursor: grab; display: flex; flex-direction: column; align-items: center; transition: transform .2s ease, box-shadow .2s ease; }
+  .card-wrapper:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .card-wrapper.dragging { opacity: 0.45; transform: scale(0.93); }
+  .controls { display: flex; justify-content: center; gap: 8px; margin-top: 16px; width: 100%; }
+  .seed-chip { font-size: 0.72rem; color: var(--steel-dim); margin-top: 14px; display: inline-flex; justify-content: center; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 20px; }
+  .seed-copy { background: none; border: none; cursor: pointer; font-size: 0.9rem; padding: 0; line-height: 1; }
+  #placeholder { grid-column: 1/-1; text-align: center; color: var(--steel-dim); padding: 60px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  #placeholder svg { width: 38px; height: 38px; color: var(--steel-dim); opacity: 0.6; }
+  #placeholder p { margin: 0; font-style: normal; font-size: 0.9rem; }
+
+  /* ---------- Toasts ---------- */
+  #toastContainer { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 99999; pointer-events: none; align-items: center; }
+  .toast { background: #1c1c22; border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.83rem; font-weight: 600; box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 8px; animation: toastIn .25s ease, toastOut .25s ease 2.5s forwards; }
+  .toast svg { width: 15px; height: 15px; color: var(--success); flex-shrink: 0; }
+  .toast.toast-error svg { color: var(--danger); }
+  .toast.toast-error { border-color: rgba(239,68,68,0.3); }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes toastOut { to { opacity: 0; transform: translateY(8px); } }
+
+  footer { margin-top: auto; padding: 36px 20px 28px; text-align: center; color: var(--steel-dim); font-size: 0.74rem; border-top: 1px solid rgba(255,255,255,0.06); line-height: 1.6; }
+  footer p { margin: 2px 0; }
+</style>
+</head>
+<body>
+
+<div id="toastContainer"></div>
+
+<div class="app-shell">
+  <div class="app-header">
+    <div class="brand">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none">
+          <rect x="3" y="6.5" width="13" height="16" rx="2.5" transform="rotate(-9 3 6.5)" fill="rgba(255,255,255,0.4)"/>
+          <rect x="7.5" y="3" width="13" height="16" rx="2.5" fill="white"/>
+          <path d="M14 7l1.05 2.3 2.45.4-1.8 1.7.4 2.5-2.1-1.2-2.1 1.2.4-2.5-1.8-1.7 2.45-.4L14 7z" fill="#f5793a"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="site-title">CardForge <span class="accent-word">AI</span></h1>
+        <p class="eyebrow" id="slogan">FORGEZ DES CARTES LÉGENDAIRES</p>
+      </div>
+    </div>
+    <div class="badge-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M5 12h4M15 12h4M7.05 7.05l2.12 2.12M14.83 14.83l2.12 2.12M7.05 16.95l2.12-2.12M14.83 9.17l2.12-2.12"/></svg>
+      Studio IA
+    </div>
+  </div>
+  <div class="forge-seam"></div>
+</div>
+
+<div class="grid">
+  <div class="panel">
+    <label id="lNom">NOM</label>
+    <input type="text" id="nomInput" oninput="updateApercu()" maxlength="20" placeholder="Ex: Guerrier Solaire">
+
+    <label id="lLore">LORE (Histoire)</label>
+    <textarea id="loreInput" oninput="updateApercu()" maxlength="90" placeholder="L'histoire ou la description..."></textarea>
+
+    <label id="lEffet">EFFET (Capacité)</label>
+    <textarea id="effetInput" oninput="updateApercu()" maxlength="90" placeholder="Capacité spéciale..."></textarea>
+
+    <label id="lPrompt">PROMPT (IA)</label>
+    <input type="text" id="promptInput" placeholder="Ex: Un chevalier en armure dorée, épique">
+    <button id="btnCopier" class="btn btn-secondary btn-block" style="margin-top:8px;" onclick="copierPrompt()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+      <span id="btnCopierText">Copier le prompt</span>
+    </button>
+
+    <label id="lSeed">SEED (Optionnel)</label>
+    <input type="number" id="seedInput" placeholder="Ex: 123456" oninput="updateApercu()">
+
+    <div class="profiles-box">
+      <label id="lProfiles" style="margin-top:0;">Profils</label>
+      <div class="profiles-row">
+        <input type="text" id="profName" placeholder="Nom du profil">
+        <button class="icon-btn" onclick="saveProfile()" title="Sauvegarder le profil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        </button>
+        <button class="icon-btn danger" onclick="deleteProfile()" title="Supprimer le profil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+      <select id="profSelect" onchange="loadProfile()" style="margin-top:10px;"></select>
+    </div>
+
+    <div id="advBtn" class="adv-toggle" onclick="toggleAdv()">
+      <span class="left">
+        <svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span id="advBtnText">Paramètres avancés</span>
+      </span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+
+    <div id="adv">
+
+      <div class="adv-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg><span id="secType">Typographie</span></h4>
+        <div class="switch-row"><span id="lLang">Langue</span> <select id="langSelect" onchange="traduire()" style="width:90px;"><option value="fr">FR</option><option value="en">EN</option><option value="pt">PT</option></select></div>
+        <div class="switch-row"><span>Police</span> <select id="fontSelect" onchange="updateApercu()" style="width:120px;"><option value="sans-serif">Sans Serif</option><option value="serif">Serif</option><option value="monospace">Monospace</option><option value="cursive">Cursive</option></select></div>
+        <div class="switch-row"><span>Gras</span> <label class="switch"><input type="checkbox" id="boldText" onchange="updateApercu()"><span class="slider"></span></label></div>
+        <div class="switch-row"><span>Italique</span> <label class="switch"><input type="checkbox" id="italicText" onchange="updateApercu()"><span class="slider"></span></label></div>
+      </div>
+
+      <div class="adv-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 0-20c5 0 9 3.5 9 8 0 2-1.5 3-3 3h-2.2c-1 0-1.8.9-1.5 1.8.4 1 .1 2.2-1.3 2.2H12"/><circle cx="7.5" cy="10.5" r="1.1"/><circle cx="12" cy="7.2" r="1.1"/><circle cx="16.5" cy="10.5" r="1.1"/></svg><span id="secTheme">Thème &amp; apparence</span></h4>
+        <label id="lTheme" style="margin-top:0;">Thème artistique</label>
+        <select id="themeSelect">
+            <optgroup label="Fantasy &amp; Mythologie">
+              <option value="Heroic Fantasy">Heroic Fantasy</option>
+              <option value="Dark Horror">Dark Horror</option>
+              <option value="Egyptian Mythology">Egyptian Mythology</option>
+              <option value="Norse Mythology">Norse Mythology</option>
+              <option value="Gothic Cathedral">Gothic Cathedral</option>
+              <option value="Atlantis">Atlantis</option>
+            </optgroup>
+            <optgroup label="Sci-Fi &amp; Futur">
+              <option value="Cyberpunk">Cyberpunk</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Space Opera">Space Opera</option>
+              <option value="Post-Apocalyptic">Post-Apocalyptic</option>
+              <option value="Synthwave">Synthwave</option>
+            </optgroup>
+            <optgroup label="Styles artistiques">
+              <option value="Oil Painting">Oil Painting</option>
+              <option value="Watercolor">Watercolor</option>
+              <option value="Vector Art">Vector Art</option>
+              <option value="Pixel Art">Pixel Art</option>
+              <option value="Vintage Comic">Vintage Comic</option>
+              <option value="Anime">Anime</option>
+              <option value="Ink Wash">Ink Wash</option>
+              <option value="Art Nouveau">Art Nouveau</option>
+              <option value="Art Deco">Art Deco</option>
+              <option value="Baroque Art">Baroque Art</option>
+            </optgroup>
+            <optgroup label="Mondes &amp; Cultures">
+              <option value="Steampunk">Steampunk</option>
+              <option value="Western Desert">Western Desert</option>
+              <option value="Tropical Jungle">Tropical Jungle</option>
+              <option value="Medieval Tapestry">Medieval Tapestry</option>
+              <option value="Crystal &amp; Gem">Crystal &amp; Gem</option>
+            </optgroup>
+        </select>
+        <div class="switch-row"><span id="lFondType">Fond</span> <select id="bgType" style="width:130px;"><option value="color">Couleur Unie</option><option value="ai">Thème IA</option></select></div>
+        <button id="btnHabillage" class="btn btn-secondary btn-block" style="margin-top:6px;" onclick="genererFondIA()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+          <span id="btnHabillageText">Habillage (Thème IA)</span>
+        </button>
+        <p style="font-size:0.72rem; color:var(--steel-dim); margin:8px 0 0;">Le thème choisi influence à la fois l'illustration générée et l'habillage de fond, pour rester cohérent.</p>
+        <div class="field-pair">
+            <label class="color-field" id="lFond">Fond <input type="color" id="bgCol" value="#ffffff" oninput="updateApercu()"></label>
+            <label class="color-field" id="lBordure">Bordure <input type="color" id="brdCol" value="#cbd5e1" oninput="updateApercu()"></label>
+        </div>
+      </div>
+
+      <div class="adv-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span id="secDisplay">Affichage de la carte</span></h4>
+        <div class="switch-row"><span id="lNombre">Nombre</span> <select id="nbCartes" style="width:64px;"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></div>
+        <div class="switch-row"><span id="lShowLore">Lore</span> <label class="switch"><input type="checkbox" id="showLore" checked onchange="updateApercu()"><span class="slider"></span></label></div>
+        <div class="switch-row"><span id="lShiny">Shiny</span> <label class="switch"><input type="checkbox" id="isShiny" onchange="updateApercu()"><span class="slider"></span></label></div>
+        <div class="switch-row"><span id="lGlossy">Glossy</span> <label class="switch"><input type="checkbox" id="isGlossy" onchange="updateApercu()"><span class="slider"></span></label></div>
+      </div>
+
+      <div class="adv-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg><span id="secStats">Statistiques</span></h4>
+        <div class="switch-row"><span id="lIconL">Icône G (gauche)</span> <label class="switch"><input type="checkbox" id="showL" onchange="updateApercu()"><span class="slider"></span></label></div>
+        <div class="stat-input-pair"><input type="text" id="valL" placeholder="Val G" oninput="updateApercu()"><input type="color" id="colL" value="#ef4444" oninput="updateApercu()"></div>
+        <div class="switch-row"><span id="lIconR">Icône D (droite)</span> <label class="switch"><input type="checkbox" id="showR" onchange="updateApercu()"><span class="slider"></span></label></div>
+        <div class="stat-input-pair"><input type="text" id="valR" placeholder="Val D" oninput="updateApercu()"><input type="color" id="colR" value="#3b82f6" oninput="updateApercu()"></div>
+      </div>
+
+      <div class="adv-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="secExport">Export &amp; qualité</span></h4>
+        <label id="lRes" style="margin-top:0;">Résolution d'export</label>
+        <select id="resScale"><option value="1">2K</option><option value="2">4K</option></select>
+        <button id="btnDos" class="btn btn-secondary btn-block" style="margin-top:14px;" onclick="genererDos()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <span id="btnDosText">Forger le dos de carte</span>
+        </button>
+        <button id="btnEffacer" class="btn btn-danger btn-block" style="margin-top:10px;" onclick="clearGallery()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          <span id="btnEffacerText">Effacer la galerie</span>
+        </button>
+        <button id="btnExpPNG" class="btn btn-success btn-block" style="margin-top:10px;" onclick="exporterPlanche()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span id="btnExpPNGText">Exporter en PNG (A4)</span>
+        </button>
+        <button id="btnExpPDF" class="btn btn-amber btn-block" style="margin-top:10px;" onclick="exporterPDF()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span id="btnExpPDFText">Exporter en PDF (A4)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <button id="genBtn" class="btn btn-primary btn-block btn-lg" style="margin-top:22px;" onclick="generer()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M5 12h4M15 12h4M7.05 7.05l2.12 2.12M14.83 14.83l2.12 2.12M7.05 16.95l2.12-2.12M14.83 9.17l2.12-2.12"/></svg>
+      <span id="genBtnText">Forger les cartes</span>
+    </button>
+  </div>
+
+  <div style="text-align:center;" class="sticky-preview">
+    <h3 id="lPreview" style="color:var(--steel); letter-spacing:0.12em; font-family:'Space Grotesk',sans-serif; font-size:0.8rem; text-transform:uppercase; font-weight:700;">Aperçu en direct</h3>
+    <div id="carte" class="card-render">
+        <div id="displayNom" class="text-box name-box" style="font-weight:800;">NAME</div>
+        <div id="imgFrame" class="img-frame">
+          <div class="shiny-overlay"></div> <img id="displayImg" src="">
+        </div>
+        <div id="displayLore" class="text-box lore-box">Lore...</div>
+        <div id="displayEffet" class="text-box effect-box" style="flex-grow:0;">Effect...</div>
+    </div>
+  </div>
+</div>
+
+<div class="gallery-heading">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+  <span id="galTitle">Votre collection</span>
+</div>
+<div id="galerie">
+    <div id="placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2" transform="rotate(-6 3 5)" opacity="0.4"/><rect x="8" y="3" width="13" height="16" rx="2"/></svg>
+        <p id="lPlace">Vos cartes générées apparaîtront ici</p>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 CardForge AI. Tous droits réservés.</p>
+    <p id="lCredit">La structure et la logique du code sont la propriété de l'auteur.</p>
+</footer>
+
+<script>
+  // -- API POLLINATIONS ADAPTATION --
+  // Remplace l'ancien appel plugin par l'appel direct à l'API Pollinations
+  async function imageGenerator(prompt) {
+      const seed = Math.floor(Math.random() * 100000);
+      return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=${seed}&width=1024&height=1024&nologo=true`;
+  }
+  // ----------------------------------
+
+  const gridParams = { cardW: 63.5, cardH: 88.9, gapX: 2, gapY: 2 };
+  const ICONS = {
+    zoom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+    reroll: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>',
+    download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+    trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>',
+    copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    errorIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+  };
+  const d = {
+    fr: { s:"FORGEZ DES CARTES LÉGENDAIRES", n:"NOM", l:"LORE (Histoire)", e:"EFFET (Capacité)", p:"PROMPT (IA)", c:"Copier le prompt", prof:"Profils", adv:"Paramètres avancés", lang:"Langue", ft:"Fond", hab:"Habillage (Thème IA)", f:"Fond", b:"Bordure", nb:"Nombre", sl:"Lore", sh:"Shiny", gl:"Glossy", il:"Icône G (gauche)", ir:"Icône D (droite)", dos:"Forger le dos de carte", del:"Effacer la galerie", ep:"Exporter en PNG (A4)", pdf:"Exporter en PDF (A4)", gen:"Forger les cartes", genLoad:"Forge en cours…", pre:"Aperçu en direct", pl:"Vos cartes générées apparaîtront ici", cr:"La structure et la logique du code sont la propriété de l'auteur.", theme:"Thème artistique", res:"Résolution d'export", secType:"Typographie", secTheme:"Thème & apparence", secDisplay:"Affichage de la carte", secStats:"Statistiques", secExport:"Export & qualité", galTitle:"Votre collection", toastCopied:"Prompt copié dans le presse-papiers", toastNeedName:"Donnez un nom à ce profil", toastSaved:"Profil sauvegardé", toastDeleted:"Profil supprimé", toastNeedSelect:"Sélectionnez un profil à supprimer", toastEmpty:"La galerie est vide", toastUsePdf:"Pour un alignement recto-verso parfait, utilisez plutôt « Exporter en PDF »", profPh:"Charger un profil…", confirmClear:"Effacer toute la galerie ? Cette action est irréversible.", toastError:"La génération a échoué. Vérifiez la connexion à l'IA." },
+    en: { s:"FORGE LEGENDARY CARDS", n:"NAME", l:"LORE (Story)", e:"EFFECT (Ability)", p:"PROMPT (AI)", c:"Copy prompt", prof:"Profiles", adv:"Advanced settings", lang:"Language", ft:"Background", hab:"Skin (AI Theme)", f:"BG", b:"Border", nb:"Count", sl:"Lore", sh:"Shiny", gl:"Glossy", il:"Icon L", ir:"Icon R", dos:"Forge card back", del:"Clear gallery", ep:"Export PNG (A4)", pdf:"Export PDF (A4)", gen:"Forge cards", genLoad:"Forging…", pre:"Live preview", pl:"Your generated cards will appear here", cr:"The structure and code logic are the property of the author.", theme:"Art theme", res:"Export resolution", secType:"Typography", secTheme:"Theme & appearance", secDisplay:"Card display", secStats:"Stats", secExport:"Export & quality", galTitle:"Your collection", toastCopied:"Prompt copied to clipboard", toastNeedName:"Give this profile a name", toastSaved:"Profile saved", toastDeleted:"Profile deleted", toastNeedSelect:"Select a profile to delete", toastEmpty:"The gallery is empty", toastUsePdf:"For perfect front/back alignment, use “Export PDF” instead", profPh:"Load a profile…", confirmClear:"Clear the entire gallery? This action can't be undone.", toastError:"Generation failed. Check the AI connection." },
+    pt: { s:"FORJE CARTAS LENDÁRIAS", n:"NOME", l:"LORE (História)", e:"EFEITO (Capacidade)", p:"PROMPT (IA)", c:"Copiar prompt", prof:"Perfis", adv:"Definições avançadas", lang:"Idioma", ft:"Fundo", hab:"Skin (Tema IA)", f:"Fundo", b:"Borda", nb:"Número", sl:"Lore", sh:"Shiny", gl:"Glossy", il:"Ícone E", ir:"Ícone D", dos:"Forjar verso da carta", del:"Limpar galeria", ep:"Exportar PNG (A4)", pdf:"Exportar PDF (A4)", gen:"Forjar cartas", genLoad:"A forjar…", pre:"Pré-visualização", pl:"As suas cartas geradas aparecerão aqui", cr:"A estrutura e a lógica do código são propriedade do autor.", theme:"Tema artístico", res:"Resolução de exportação", secType:"Tipografia", secTheme:"Tema & aparência", secDisplay:"Exibição da carta", secStats:"Estatísticas", secExport:"Exportação & qualidade", galTitle:"A sua coleção", toastCopied:"Prompt copiado para a área de transferência", toastNeedName:"Dê um nome a este perfil", toastSaved:"Perfil guardado", toastDeleted:"Perfil eliminado", toastNeedSelect:"Selecione um perfil para eliminar", toastEmpty:"A galeria está vazia", toastUsePdf:"Para um alinhamento frente/verso perfeito, use “Exportar PDF”", profPh:"Carregar um perfil…", confirmClear:"Limpar toda a galeria? Esta ação não pode ser desfeita.", toastError:"A geração falhou. Verifique a ligação à IA." }
+  };
+
+  function curLang() { return document.getElementById("langSelect").value || "fr"; }
+
+  function fitImagesCover(root) {
+    root.querySelectorAll('img').forEach(img => {
+      const parent = img.parentElement;
+      if (!parent || !img.naturalWidth || !img.naturalHeight) return;
+      const fw = parent.clientWidth, fh = parent.clientHeight;
+      if (!fw || !fh) return;
+      const scale = Math.max(fw / img.naturalWidth, fh / img.naturalHeight);
+      const w = img.naturalWidth * scale, h = img.naturalHeight * scale;
+      parent.style.position = parent.style.position || 'relative';
+      img.style.position = 'absolute';
+      img.style.left = ((fw - w) / 2) + 'px';
+      img.style.top = ((fh - h) / 2) + 'px';
+      img.style.width = w + 'px';
+      img.style.height = h + 'px';
+      img.style.maxWidth = 'none';
+    });
+  }
+
+  function extractImageUrl(result) {
+    if (typeof result === 'string') return result;
+    if (result && typeof result === 'object') {
+      if (typeof result.image === 'string') return result.image;
+      if (result.image && typeof result.image.src === 'string') return result.image.src;
+      if (typeof result.url === 'string') return result.url;
+      if (typeof result.src === 'string') return result.src;
+    }
+    return String(result);
+  }
+
+  function showToast(msg, type) {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = 'toast' + (type === 'error' ? ' toast-error' : '');
+    t.innerHTML = (type === 'error' ? ICONS.errorIcon : ICONS.check) + '<span>' + msg + '</span>';
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3400);
+  }
+
+  function traduire() {
+    let l = curLang();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set("slogan", d[l].s); set("lNom", d[l].n); set("lLore", d[l].l); set("lEffet", d[l].e); set("lPrompt", d[l].p);
+    set("btnCopierText", d[l].c); set("lProfiles", d[l].prof); set("advBtnText", d[l].adv); set("lLang", d[l].lang);
+    set("lFondType", d[l].ft); set("btnHabillageText", d[l].hab);
+    const fond = document.getElementById("lFond"); if (fond) fond.childNodes[0].textContent = d[l].f + " ";
+    const bord = document.getElementById("lBordure"); if (bord) bord.childNodes[0].textContent = d[l].b + " ";
+    set("lNombre", d[l].nb); set("lShowLore", d[l].sl); set("lShiny", d[l].sh); set("lGlossy", d[l].gl);
+    set("lIconL", d[l].il); set("lIconR", d[l].ir); set("btnDosText", d[l].dos); set("btnEffacerText", d[l].del);
+    set("btnExpPNGText", d[l].ep); set("btnExpPDFText", d[l].pdf); set("genBtnText", d[l].gen); set("lPreview", d[l].pre);
+    set("lPlace", d[l].pl); set("lCredit", d[l].cr); set("lTheme", d[l].theme); set("lRes", d[l].res);
+    set("secType", d[l].secType); set("secTheme", d[l].secTheme); set("secDisplay", d[l].secDisplay);
+    set("secStats", d[l].secStats); set("secExport", d[l].secExport); set("galTitle", d[l].galTitle);
+    updateProfileList();
+  }
+
+  function toggleAdv() {
+    const adv = document.getElementById('adv');
+    const open = adv.style.display === 'block';
+    adv.style.display = open ? 'none' : 'block';
+    document.getElementById('advBtn').classList.toggle('open', !open);
+  }
+
+  function copierPrompt() {
+    navigator.clipboard.writeText(document.getElementById('promptInput').value);
+    showToast(d[curLang()].toastCopied);
+  }
+
+  function initDragAndDrop() { const galerie = document.getElementById('galerie'); galerie.addEventListener('dragstart', (e) => { if(e.target.tagName === 'BUTTON') { e.preventDefault(); return; } const item = e.target.closest('.card-wrapper'); if(item) item.classList.add('dragging'); }); galerie.addEventListener('dragend', (e) => { const item = e.target.closest('.card-wrapper'); if(item) item.classList.remove('dragging'); save(); }); galerie.addEventListener('dragover', (e) => { e.preventDefault(); const afterElement = getDragAfterElement(galerie, e.clientY); const current = document.querySelector('.dragging'); if (current) { if (afterElement == null) galerie.appendChild(current); else galerie.insertBefore(current, afterElement); } }); }
+  function getDragAfterElement(container, y) { const draggableElements = [...container.querySelectorAll('.card-wrapper:not(.dragging)')]; return draggableElements.reduce((closest, child) => { const box = child.getBoundingClientRect(); const offset = y - box.top - box.height / 2; if (offset < 0 && offset > closest.offset) return { offset: offset, element: child }; else return closest; }, { offset: Number.NEGATIVE_INFINITY }).element; }
+  const themesData = { "Heroic Fantasy": ["ancient carved stone", "mystical runes", "glowing ethereal mist"], "Cyberpunk": ["neon circuit board", "gritty chrome textures", "holographic data streams"], "Anime": ["soft watercolor sky", "dynamic action speed lines", "magical sparkle particles"], "Oil Painting": ["canvas fabric texture", "thick impasto brushstrokes", "classical art frame"], "Steampunk": ["brass clockwork gears", "aged parchment paper", "copper piping details"], "Dark Horror": ["cracked obsidian stone", "dripping blood ink", "eerie shadowy fog"], "Pixel Art": ["8-bit brick patterns", "classic console dither textures", "vibrant retro screen grid"], "Watercolor": ["bleeding pigment stains", "wet paper texture", "soft pastel gradients"], "Sci-Fi": ["brushed metallic plating", "starlight galaxy nebula", "futuristic carbon fiber"], "Vector Art": ["clean geometric shapes", "flat minimalist flat shading", "bold contrast graphics"], "Baroque Art": ["gilded gold filigree", "velvet fabric background", "ornate royal ceiling fresco"], "Vintage Comic": ["ben-day dot pattern", "distressed paper texture", "bold ink outlines"], "Egyptian Mythology": ["golden hieroglyphic carvings", "sun-bleached sandstone walls", "glowing ankh symbols"], "Norse Mythology": ["weathered rune-carved stone", "frost-covered iron chains", "raven feather motifs"], "Gothic Cathedral": ["carved stone gargoyles", "candlelit stained glass", "weathered cathedral archways"], "Atlantis": ["glowing coral formations", "sunken stone ruins", "bioluminescent underwater haze"], "Space Opera": ["distant nebula starfield", "sleek chrome starship hull", "glowing energy shield"], "Post-Apocalyptic": ["rusted scrap metal plating", "cracked wasteland terrain", "toxic haze atmosphere"], "Synthwave": ["neon grid horizon", "retro sunset gradient", "glowing chrome reflections"], "Ink Wash": ["flowing sumi-e brushstrokes", "textured rice paper", "minimalist ink gradients"], "Art Nouveau": ["flowing organic linework", "stained glass floral patterns", "elegant gold filigree curves"], "Art Deco": ["geometric gold linework", "polished black marble", "radiant sunburst patterns"], "Western Desert": ["weathered wooden planks", "dusty canyon rock formations", "sun-cracked desert earth"], "Tropical Jungle": ["dense vine-covered ruins", "lush emerald foliage", "humid jungle mist"], "Medieval Tapestry": ["woven heraldic thread texture", "aged embroidered fabric", "faded royal banner patterns"], "Crystal & Gem": ["faceted crystal formations", "prismatic light refraction", "geode mineral textures"] };
+
+  function saveProfile() {
+    let l = curLang();
+    let name = document.getElementById('profName').value;
+    if (!name) { showToast(d[l].toastNeedName); return; }
+    let profile = { theme: document.getElementById('themeSelect').value, bgType: document.getElementById('bgType').value, bgCol: document.getElementById('bgCol').value, brdCol: document.getElementById('brdCol').value, showLore: document.getElementById('showLore').checked, isShiny: document.getElementById('isShiny').checked, isGlossy: document.getElementById('isGlossy').checked, showL: document.getElementById('showL').checked, showR: document.getElementById('showR').checked, valL: document.getElementById('valL').value, colL: document.getElementById('colL').value, valR: document.getElementById('valR').value, colR: document.getElementById('colR').value, font: document.getElementById('fontSelect').value, bold: document.getElementById('boldText').checked, italic: document.getElementById('italicText').checked };
+    localStorage.setItem('prof_' + name, JSON.stringify(profile));
+    updateProfileList();
+    document.getElementById('profName').value = '';
+    showToast(d[l].toastSaved);
+  }
+  function deleteProfile() {
+    let l = curLang();
+    let name = document.getElementById('profSelect').value;
+    if (!name) { showToast(d[l].toastNeedSelect); return; }
+    if (confirm("Supprimer le profil '" + name + "' ?")) { localStorage.removeItem('prof_' + name); updateProfileList(); updateApercu(); showToast(d[l].toastDeleted); }
+  }
+  function loadProfile() { let name = document.getElementById('profSelect').value; if(!name) return; let p = JSON.parse(localStorage.getItem('prof_' + name)); document.getElementById('themeSelect').value = p.theme; document.getElementById('bgType').value = p.bgType; document.getElementById('bgCol').value = p.bgCol; document.getElementById('brdCol').value = p.brdCol; document.getElementById('showLore').checked = p.showLore; document.getElementById('isShiny').checked = p.isShiny; document.getElementById('isGlossy').checked = p.isGlossy; document.getElementById('showL').checked = p.showL; document.getElementById('showR').checked = p.showR; document.getElementById('valL').value = p.valL; document.getElementById('colL').value = p.colL; document.getElementById('valR').value = p.valR; document.getElementById('colR').value = p.colR; document.getElementById('fontSelect').value = p.font; document.getElementById('boldText').checked = p.bold; document.getElementById('italicText').checked = p.italic; updateApercu(); }
+  function updateProfileList() { let sel = document.getElementById('profSelect'); let l = curLang(); let current = sel.value; sel.innerHTML = '<option value="">' + d[l].profPh + '</option>'; Object.keys(localStorage).forEach(k => { if(k.startsWith('prof_')) { let name = k.replace('prof_', ''); sel.innerHTML += `<option value="${name}">${name}</option>`; } }); if (current) sel.value = current; }
+  function getPrompts() { let subject = document.getElementById("promptInput").value || "mystical character"; let p = subject + ", " + document.getElementById("themeSelect").value + ", high quality, professional illustration"; if(document.getElementById("isShiny").checked) p += ", holographic foil, rainbow shimmer"; let seed = document.getElementById("seedInput").value; if(seed) p += ", seed " + seed; return p; }
+  function updateApercu() { const c = document.getElementById('carte'); const imgF = document.getElementById('imgFrame'); const font = document.getElementById('fontSelect').value; const isBold = document.getElementById('boldText').checked; const isItalic = document.getElementById('italicText').checked; if(document.getElementById("bgType").value === "color") c.style.background = document.getElementById('bgCol').value; c.style.borderColor = document.getElementById('brdCol').value; c.className = 'card-render ' + (document.getElementById('showLore').checked ? '' : ' hide-lore'); imgF.className = 'img-frame ' + (document.getElementById('isGlossy').checked ? 'is-glossy' : ''); const texts = [document.getElementById('displayNom'), document.getElementById('displayLore'), document.getElementById('displayEffet')]; texts.forEach(el => { el.style.fontFamily = font; el.style.fontWeight = isBold ? '900' : 'normal'; el.style.fontStyle = isItalic ? 'italic' : 'normal'; }); document.getElementById('displayNom').innerText = document.getElementById('nomInput').value || 'NAME'; document.getElementById('displayLore').innerText = document.getElementById('loreInput').value || 'Lore...'; document.getElementById('displayEffet').innerText = document.getElementById('effetInput').value || 'Effect...'; c.querySelectorAll('.icon-shape').forEach(e => e.remove()); if(document.getElementById('showL').checked) { let el = document.createElement('div'); el.className = 'icon-shape heart tl'; el.style.background = document.getElementById('colL').value; el.innerText = document.getElementById('valL').value; c.appendChild(el); } if(document.getElementById('showR').checked) { let el = document.createElement('div'); el.className = 'icon-shape shield tr'; el.style.background = document.getElementById('colR').value; el.innerText = document.getElementById('valR').value; c.appendChild(el); } }
+  updateApercu();
+  document.addEventListener("keydown", function(event) { if (event.key === "Enter" && document.activeElement.tagName === "INPUT") generer(); });
+  async function genererFondIA() { let theme = document.getElementById("themeSelect").value; let variations = themesData[theme] || ["abstract artistic background"]; let variationAleatoire = variations[Math.floor(Math.random() * variations.length)]; let prompt = `professional TCG background, themed ${theme}, featuring ${variationAleatoire}, clean and dark central area for text, elegant border, high-end digital art, not cluttered, 8k, game art`; try { let url = extractImageUrl(await imageGenerator(prompt)); document.getElementById('carte').style.background = `url(${url}) center/cover`; } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } }
+  function agrandirCarte(cardEl) { let clone = cardEl.cloneNode(true); clone.style.margin = "0"; clone.style.width = "350px"; clone.style.height = "490px"; clone.style.cursor = "zoom-out"; clone.style.transform = "scale(1.2)"; let m = document.createElement('div'); m.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:flex; align-items:center; justify-content:center; z-index:9999;"; m.onclick = () => m.remove(); m.appendChild(clone); document.body.appendChild(m); }
+  function dupliquerCard(btn) { const originalWrapper = btn.closest('.card-wrapper'); const clone = originalWrapper.cloneNode(true); document.getElementById('galerie').appendChild(clone); save(); }
+
+  async function generer() {
+    const btn = document.getElementById('genBtn');
+    const label = document.getElementById('genBtnText');
+    const l = curLang();
+    document.getElementById('placeholder').style.display = 'none';
+    btn.classList.add('loading'); btn.disabled = true; label.textContent = d[l].genLoad;
+    try {
+      for(let i=0; i<parseInt(document.getElementById('nbCartes').value); i++) document.getElementById('galerie').appendChild(await createCardElement());
+    } catch (err) {
+      console.error(err); showToast(d[l].toastError, 'error');
+    } finally {
+      btn.classList.remove('loading'); btn.disabled = false; label.textContent = d[l].gen;
+    }
+    save();
+  }
+  async function createCardElement() { let seedValue = document.getElementById("seedInput").value || "Aléatoire"; let url = extractImageUrl(await imageGenerator(getPrompts())); let div = document.createElement('div'); div.className = 'card-wrapper'; div.setAttribute('draggable', 'true'); div.innerHTML = document.getElementById('carte').outerHTML + `<div class="seed-chip">Seed: ${seedValue} <button class="seed-copy" onclick="navigator.clipboard.writeText('${seedValue}')" title="Copier Seed">🌱</button></div>` + `<div class="controls"><button class="icon-btn" title="Zoom" onclick="agrandirCarte(this.parentElement.parentElement.querySelector('.card-render'))">${ICONS.zoom}</button><button class="icon-btn" title="Reroll" onclick="reroll(this)">${ICONS.reroll}</button><button class="icon-btn" title="Exporter" onclick="exportCard(this)">${ICONS.download}</button><button class="icon-btn danger" title="Supprimer" onclick="this.parentElement.parentElement.remove(); save();">${ICONS.trash}</button></div>`; let imgEl = div.querySelector('img'); imgEl.crossOrigin = "anonymous"; imgEl.src = url; imgEl.style.display = 'block'; return div; }
+  async function genererDos() {
+    const btn = document.getElementById('btnDos');
+    btn.classList.add('loading'); btn.disabled = true;
+    try {
+      let url = extractImageUrl(await imageGenerator("ornate symmetrical fantasy card back, no text, " + document.getElementById("themeSelect").value));
+      let div = document.createElement('div'); div.className = 'card-wrapper'; div.setAttribute('draggable', 'true'); div.innerHTML = `<div class="card-render" style="border:none; padding:0; border-radius:16px; overflow:hidden; background:white;"><img crossorigin="anonymous" src="${url}" style="display:block; width:100%; height:100%; object-fit:cover;"></div><div class="controls"><button class="icon-btn" title="Zoom" onclick="agrandirCarte(this.parentElement.parentElement.querySelector('.card-render'))">${ICONS.zoom}</button><button class="icon-btn" title="Reroll" onclick="rerollDos(this)">${ICONS.reroll}</button><button class="icon-btn" title="Dupliquer" onclick="dupliquerCard(this)">${ICONS.copy}</button><button class="icon-btn" title="Exporter" onclick="exportCard(this)">${ICONS.download}</button><button class="icon-btn danger" title="Supprimer" onclick="this.parentElement.parentElement.remove(); save();">${ICONS.trash}</button></div>`;
+      div.querySelector('img').style.display = 'block';
+      document.getElementById('galerie').appendChild(div);
+      save();
+    } catch (err) {
+      console.error(err); showToast(d[curLang()].toastError, 'error');
+    } finally {
+      btn.classList.remove('loading'); btn.disabled = false;
+    }
+  }
+  async function reroll(btn) { try { btn.parentElement.parentElement.querySelector('img').src = extractImageUrl(await imageGenerator(getPrompts())); save(); } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } }
+  async function rerollDos(btn) { try { let url = extractImageUrl(await imageGenerator("ornate symmetrical fantasy card back")); btn.parentElement.parentElement.querySelector('img').src = url; save(); } catch (err) { console.error(err); showToast(d[curLang()].toastError, 'error'); } }
+  function save() { localStorage.setItem('cards', document.getElementById('galerie').innerHTML); }
+  function clearGallery() { if (!confirm(d[curLang()].confirmClear)) return; document.getElementById('galerie').innerHTML = `<div id="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2" transform="rotate(-6 3 5)" opacity="0.4"/><rect x="8" y="3" width="13" height="16" rx="2"/></svg><p id="lPlace">${d[curLang()].pl}</p></div>`; localStorage.removeItem('cards'); }
+  window.onload = () => { if(localStorage.getItem('cards')) { document.getElementById('galerie').innerHTML = localStorage.getItem('cards'); document.getElementById('placeholder').style.display = 'none'; } updateProfileList(); initDragAndDrop(); };
+  function exportCard(btn) { const wrapper = btn.closest('.card-wrapper'); const cardEl = wrapper.querySelector('.card-render'); html2canvas(cardEl, { scale: 2, backgroundColor: null, useCORS: true, allowTaint: false, onclone: (clonedDoc) => { fitImagesCover(clonedDoc); } }).then(canvas => { const finalCanvas = document.createElement('canvas'); finalCanvas.width = 750; finalCanvas.height = 1050; const ctx = finalCanvas.getContext('2d'); ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 750, 1050); const a = document.createElement('a'); a.download = 'Carte_Format_Poker.png'; a.href = finalCanvas.toDataURL("image/png"); a.click(); }); }
+  async function exporterPDF() { const l = curLang(); const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'mm', 'a4'); const cartes = document.querySelectorAll('#galerie .card-render'); if (cartes.length === 0) { showToast(d[l].toastEmpty); return; } const startX = (210 - (gridParams.cardW * 3 + gridParams.gapX * 2)) / 2, startY = (297 - (gridParams.cardH * 3 + gridParams.gapY * 2)) / 2; let x = startX, y = startY, countOnPage = 0; for (let i = 0; i < cartes.length; i++) { if (countOnPage === 9) { doc.addPage(); x = startX; y = startY; countOnPage = 0; } const canvas = await html2canvas(cartes[i], { scale: 3, useCORS: true, onclone: (clonedDoc) => { fitImagesCover(clonedDoc); } }); doc.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', x, y, gridParams.cardW, gridParams.cardH); countOnPage++; x += (gridParams.cardW + gridParams.gapX); if (countOnPage % 3 === 0) { x = startX; y += (gridParams.cardH + gridParams.gapY); } } doc.save("Cartes_Standard_Poker.pdf"); }
+  async function exporterPlanche() { showToast(d[curLang()].toastUsePdf); }
+</script>
+</body>
+</html>
